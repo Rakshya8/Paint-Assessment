@@ -7,18 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections;
+using System.IO;
 
 namespace Assessment1
 {
+    
     public partial class Form1 : Form
     {
-        Graphics g;
+        
         public Form1()
         {
             InitializeComponent();
             g = panel1.CreateGraphics();
         }
 
+        Graphics g;
+        bool new_point = false;
+        int initX;
+        int initY;
+      
         private void label2_Click(object sender, EventArgs e)
         {
 
@@ -36,41 +44,114 @@ namespace Assessment1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string executing_command = textBox3.Text.ToLower();
-            string drawing_command = textBox1.Text.ToLower();
+            Form1 fm = new Form1();
+            string executing_command = textBox3.Text.ToLower(); 
+            Point panel_location = panel1.PointToScreen(Point.Empty);
+            Pen p1 = new Pen(Color.Black, 4);
+            SolidBrush sb = new SolidBrush(p1.Color);
+
             if (executing_command.Equals("clear"))
             {
                 g.Clear(Color.White);
             }
             if (executing_command.Equals("reset"))
             {
-     
                 Cursor.Position = new Point(0, 0);
+                new_point = false;
             }
             if (executing_command.Equals("run"))
             {
+                String[] lines = textBox1.Text.ToLower().Split(new String[] { Environment.NewLine }, StringSplitOptions.None);
+                foreach (string drawing_command in lines)
+                {
+                
                 if (drawing_command.Contains("moveto"))
                 {
-                    Point location = panel1.PointToScreen(Point.Empty);
                     string positions = drawing_command.Split('(', ')')[1];
-                    int initX = int.Parse(positions.Split(',')[0]);
-                    int initY = int.Parse(positions.Split(',')[1]);
-                    int Panel_PositionX = location.X;
-                    int Panel_PositionY = location.Y;
-                    textBox2.AppendText(location+"");
+                    initX = int.Parse(positions.Split(',')[0]);
+                    initY = int.Parse(positions.Split(',')[1]);
+                    new_point = true;
+                        //calculate_coordinate(initX, initY);
                     this.Cursor = new Cursor(Cursor.Current.Handle);
-                    Cursor.Position = new Point( Panel_PositionX + initX, Panel_PositionY + initY);
-                    Point latestpoint = new Point(Panel_PositionX + initX, Panel_PositionY + initY);
-                    Cursor.Clip = new Rectangle(this.Location, this.Size);
+                    Cursor.Position = new Point(panel_location.X + initX, panel_location.Y + initY);
                 }
-                if (drawing_command.Contains("circle"))
-                {
-                    int radius = int.Parse(drawing_command.Split('(', ')')[1]);
+
+                    if (drawing_command.Contains("drawto"))
+                    {
+                        string positions = (drawing_command.Split('(', ')')[1]);
+                        int third_point = int.Parse(positions.Split(',')[0]);
+                        int fourth_point = int.Parse(positions.Split(',')[1]);
+
+                        g.DrawLine(p1, initX, initY, third_point, fourth_point);
+                    }
                     
-                    Pen p = new Pen(Color.Black, 4);
-                    g.DrawEllipse(p, 75, 160, radius, radius);
+
+                 if (drawing_command.Contains("circle"))
+                {
+                    float radius = float.Parse(drawing_command.Split('(', ')')[1]);
+                    if (new_point)
+                    {
+                        g.DrawEllipse(p1, initX, initY, radius, radius);
+                    }
+                    else
+                    {
+                        g.DrawEllipse(p1, 0, 0, radius, radius);
+                    }
                 }
+
+                    //Rectangle
+                    if (drawing_command.Contains("rectangle"))
+                    {
+                        string size = (drawing_command.Split('(', ')')[1]);
+                        float length = float.Parse(size.Split(',')[0]);
+                        float width = float.Parse(size.Split(',')[1]);
+                        if (new_point)
+                        {
+                            g.FillRectangle(sb, initX, initY, length, width);
+                        }
+                        else
+                        {
+                            g.FillRectangle(sb, 0, 0, length, width);
+                        }
+                        
+                    }
+                    if (drawing_command.Contains("traingle"))
+                    {
+                        string size = (drawing_command.Split('(', ')')[1]);
+                        float side1 = float.Parse(size.Split(',')[0]);
+                        float side2 = float.Parse(size.Split(',')[1]);
+                        float side3 = float.Parse(size.Split(',')[2]);
+
+                        PointF[] points = new PointF[3];
+                        points[0].X = initX;
+                        points[0].Y = initY;
+
+                        points[1].X = initX + side1;
+                        points[1].Y = initY;
+
+                        points[2].X = initX + side3 ;
+                        points[2].Y = initY - side2;
+
+                        
+                        if (new_point)
+                        {
+                            g.DrawPolygon(p1, points);
+                            //g.DrawLine(p1, initX, initY, initX + side1, initY);
+                            //g.DrawLine(p1, initX + side1, initY, initX + side1, initY - side2);
+                            //g.DrawLine(p1, initX + side1, initY - side2, initX, initY - side2 + side3);
+                        }
+                        else
+                        {
+                        
+                        }
+
+                    }
+
+
                 }
+            }
+
+            
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -78,15 +159,26 @@ namespace Assessment1
 
         }
 
-        private void label4_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-
+            saveFileDialog1.Title = "Save Text File";
+            saveFileDialog1.DefaultExt = "txt";
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.ShowDialog();
+            string path = saveFileDialog1.FileName;
+            File.WriteAllText(path, textBox1.Text);
         }
 
-        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-           label4.Text = string.Format("X: {0} , Y: {1}", Cursor.Position.X, Cursor.Position.Y);
-        }
+            openFileDialog1.Title = "Browse Text Files";
+            openFileDialog1.DefaultExt = "txt";
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.ShowDialog();
+            string path = openFileDialog1.FileName;
+            string readfile = File.ReadAllText(path);
+            textBox1.Text = readfile;
 
+        }
     }
 }
