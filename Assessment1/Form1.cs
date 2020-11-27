@@ -16,38 +16,33 @@ namespace Assessment1
     public partial class Form1 : Form
     {
         
+        Graphics g;
+        ShapeFactory factory = new ShapeFactory();
+        bool fillshape = false;
+        bool valid_exexute_command;
+        bool valid_program_command;
+        
+        //default settings
+        Color color = Color.Black;
+        int initX = 0;
+        int initY = 0;
+
+        
         public Form1()
         {
             InitializeComponent();
             g = panel1.CreateGraphics();
-        }
-
-        Graphics g;
-        bool new_point = false;
-        int initX;
-        int initY;
-      
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
             
         }
 
+        
+        bool new_point = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1 fm = new Form1();
+
             string executing_command = textBox3.Text.ToLower(); 
             Point panel_location = panel1.PointToScreen(Point.Empty);
-            Pen p1 = new Pen(Color.Black, 4);
+            Pen p1 = new Pen(color, 4);
             SolidBrush sb = new SolidBrush(p1.Color);
 
             if (executing_command.Equals("clear"))
@@ -84,24 +79,65 @@ namespace Assessment1
 
                         g.DrawLine(p1, initX, initY, third_point, fourth_point);
                     }
-                    
 
-                 if (drawing_command.Contains("circle"))
+                    if (drawing_command.Contains("pen"))
+                    {
+                        string pen_color_name = (drawing_command.Split('(', ')')[1]);
+                        if (pen_color_name.Contains("red"))
+                        {
+                            color = Color.Red;
+                        }
+                        if (pen_color_name.Contains("green"))
+                        {
+                            color = Color.Green;
+                        }
+                        if (pen_color_name.Contains("blue"))
+                        {
+                            color = Color.Blue;
+                        }
+                        if (pen_color_name.Contains("black"))
+                        {
+                            color = Color.Black;
+                        }
+                        if (pen_color_name.Contains("orange"))
+                        {
+                            color = Color.Orange;
+                        }
+                    }
+                    if (drawing_command.Contains("fill"))
+                    {
+                        string fillstring = (drawing_command.Split('(', ')')[1]);
+                        if (fillstring.Contains("on"))
+                        {
+                            fillshape = true;
+                        }
+                        else if (fillstring.Contains("off"))
+                        {
+                            fillshape = false;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid Command. Commands are: on and off");
+                        }
+                        
+                    }
+
+                    if (drawing_command.Contains("circle"))
                 {
-                    float radius = float.Parse(drawing_command.Split('(', ')')[1]);
-                    if (new_point)
-                    {
-                        g.DrawEllipse(p1, initX, initY, radius, radius);
-                    }
-                    else
-                    {
-                        g.DrawEllipse(p1, 0, 0, radius, radius);
-                    }
+                        int radius = int.Parse(drawing_command.Split('(', ')')[1]);
+                        shape s = factory.getShape("circle");
+                        s.set(color, initX, initY, radius);
+                        s.draw(g, fillshape);
+
                 }
+
+                 //
+
 
                     //Rectangle
                     if (drawing_command.Contains("rectangle"))
                     {
+                        
                         string size = (drawing_command.Split('(', ')')[1]);
                         float length = float.Parse(size.Split(',')[0]);
                         float width = float.Parse(size.Split(',')[1]);
@@ -117,6 +153,7 @@ namespace Assessment1
                     }
                     if (drawing_command.Contains("traingle"))
                     {
+                        
                         string size = (drawing_command.Split('(', ')')[1]);
                         float side1 = float.Parse(size.Split(',')[0]);
                         float side2 = float.Parse(size.Split(',')[1]);
@@ -154,10 +191,6 @@ namespace Assessment1
             
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -178,6 +211,11 @@ namespace Assessment1
             string path = openFileDialog1.FileName;
             string readfile = File.ReadAllText(path);
             textBox1.Text = readfile;
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }
