@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Check_Valid_Commands.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="shape.cs" />
     <Compile Include="circle.cs" />
     <Compile Include="Form1.cs">

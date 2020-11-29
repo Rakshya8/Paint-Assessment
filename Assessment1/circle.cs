@@ -16,21 +16,19 @@ namespace Assessment1
 
         }
 
-        public circle(Color color, int x, int y, int radius) : base(color, x, y)
+        public circle(Color color, bool fillshape, int x, int y, int radius) : base(color,fillshape, x, y)
         {
-
-            this.radius = radius; //the only thingthat is different from shape
+            this.radius = radius;
         }
 
-        public override void set(Color colour, params int[] list)
+        public override void set(Color colour, bool fill, params int[] list)
         {
             //list[0] is x, list[1] is y, list[2] is radius
-            base.set(colour, list[0], list[1]);
+            base.set(colour, fill, list[0], list[1]);
             this.radius = list[2];
-
         }
 
-        public override void draw(Graphics g, bool fill)
+        public override void draw(Graphics g)
         {
 
             Pen p = new Pen(c, 2);

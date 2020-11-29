@@ -20,12 +20,12 @@ namespace Assessment1
             }
             else if (shapeType.Equals("RECTANGLE"))
             {
-                return null;
+                return new rectangle();
 
             }
             else if (shapeType.Equals("TRAINGLE"))
             {
-               return null;
+               return new traingle();
             }
             else
             {

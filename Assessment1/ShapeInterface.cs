@@ -9,8 +9,8 @@ namespace Assessment1
 {
     interface IShapes
     {
-        void set(Color c, params int[] list);
-        void draw(Graphics g, bool fill);
+        void set(Color c, bool fillshape, params int[] list);
+        void draw(Graphics g);
 
     }
 }
