@@ -8,20 +8,20 @@ using System.Drawing;
 namespace Assessment1
 {
     /// <summary>
-    /// Class Rectangle inherits base class Shape
+    /// Class Traingle inherits base class Shape
     /// </summary>
-    class Rectangle : Shape
+    class Triangle : Shape
     {
-        int length;
-        int width;
+        int side1, side2, side3;
 
         /// <summary>
         /// Call base class constructor
         /// </summary>
-        public Rectangle() : base()
+        public Triangle() : base()
         {
 
         }
+
         /// <summary>
         /// Overloading Constructor and call overloaded base constructor
         /// </summary>
@@ -29,14 +29,15 @@ namespace Assessment1
         /// <param name="fillshape">Inner Fill Shapes</param>
         /// <param name="x">X-axis Coordinate</param>
         /// <param name="y">Y-axis Coordinate</param>
-        /// <param name="length">Length of Rectangle</param>
-        /// <param name="width">Width of Rectangle</param>
-        public Rectangle(Color color, bool fillshape, int x, int y, int length, int width) : base(color, fillshape, x, y)
+        /// <param name="a">Side1 of Traingle</param>
+        /// <param name="b">Side2 of Traingle</param>
+        /// <param name="c">Side3 of Traingle</param>
+        public Triangle(Color color,bool fillshape, int x, int y, int a, int b, int c) : base(color, fillshape, x, y)
         {
 
-            this.width = width;
-            this.length = length;
-
+            this.side1 = a;
+            this.side2 = b;
+            this.side3 = c;
         }
 
         /// <summary>
@@ -45,12 +46,13 @@ namespace Assessment1
         /// <param name="colour">Color of pen</param>
         /// <param name="fill">Inner fill shapes</param>
         /// <param name="list">stores number of arguments</param>
-        public override void Set(Color color, bool fill, params int[] list)
+        public override void Set(Color colour,bool fill, params int[] list)
         {
-       
-            base.Set(color, fill, list[0], list[1]);
-            this.length = list[2];
-            this.width = list[3];
+            //list[0] is x, list[1] is y, list[2] is radius
+            base.Set(colour,fill, list[0], list[1]);
+            this.side1 = list[2];
+            this.side2 = list[3];
+            this.side3 = list[4];
 
         }
 
@@ -63,13 +65,22 @@ namespace Assessment1
 
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
+            PointF[] points = new PointF[3];
+            points[0].X = x;
+            points[0].Y = y;
+
+            points[1].X = x + side1;
+            points[1].Y = y;
+
+            points[2].X = x + side3;
+            points[2].Y = y - side2;
             if (fill)
             {
-                g.FillRectangle(b, x, y, length, width);
+                g.FillPolygon(b, points);
             }
             else
             {
-                g.DrawRectangle(p, x, y, length, width);
+                g.DrawPolygon(p, points);
             }
 
 

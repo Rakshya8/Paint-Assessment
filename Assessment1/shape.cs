@@ -7,38 +7,58 @@ using System.Drawing;
 
 namespace Assessment1
 {
-   abstract class shape : IShapes
+    /// <summary>
+    /// Abstract class Shape which declares the factory method
+    /// </summary>
+    abstract class Shape : IShapes
     {
         protected Color c;
         protected int x, y;
         protected bool fill;
 
-        public shape()
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Shape()
         {
             c = Color.Black;
             x = y = 0;
         }
-        public shape(Color colour, bool fillshape, int x, int y)
+
+        /// <summary>
+        /// Overloading constructor with parameters
+        /// </summary>
+        /// <param name="color">Color Of Pen</param>
+        /// <param name="fillshape">Inner Fill Shapes</param>
+        /// <param name="x">X-axis Coordinate</param>
+        /// <param name="y">Y-axis Coordinate</param>
+        public Shape(Color colour, bool fillshape, int x, int y)
         {
 
-            this.c = colour; 
-            this.x = x; 
+            this.c = colour;
+            this.x = x;
             this.y = y;
             this.fill = fillshape;
         }
 
-        public abstract void draw(Graphics g);
+        /// <summary>
+        /// Draw shape on panel
+        /// </summary>
+        /// <param name="g">GDI+ Drawing Surface</param>
+        public abstract void Draw(Graphics g);
 
-        public virtual void set(Color colour,bool fillshape, params int[] list)
+        /// <summary>
+        /// Override set method derived from base class
+        /// </summary>
+        /// <param name="colour">Color of pen</param>
+        /// <param name="fill">Inner fill shapes</param>
+        /// <param name="list">stores number of arguments</param>
+        public virtual void Set(Color colour, bool fillshape, params int[] list)
         {
-            this.c = colour;
-            this.fill = fillshape;
-            this.x = list[0];
-            this.y = list[1];
-            
-                 
+            c = colour;
+            fill = fillshape;
+            x = list[0];
+            y = list[1];
         }
-
-
     }
 }

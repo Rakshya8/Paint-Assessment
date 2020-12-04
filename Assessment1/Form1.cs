@@ -12,21 +12,37 @@ using System.IO;
 
 namespace Assessment1
 {
-
+    /// <summary>
+    /// Form1 class inherits from the base class Form
+    /// </summary>
     public partial class Form1 : Form
     {
+        //GDI+ Drawing surface
         Graphics g;
+        //Object of class ShapeFactory
         ShapeFactory factory;
-        shape s;
+        //Object of class Shape
+        Shape s;
+        //Object of class Check_Valid_Commands
         Check_Valid_Commands check_cmd;
+        //store list of objects.
+        ArrayList shape_list = new ArrayList();
+        //checks if fill is on/off
         private bool fillshape = false;
+        //count line of commands
         int count_line = 0;
 
-        //default settings
+        //default Settings
+        //store pen color
         Color color = Color.Black;
+        //store x-axis point
         int initX = 0;
+        //store y-axis point
         int initY = 0;
 
+        /// <summary>
+        /// Default Constructor to instantiate values of form
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -36,204 +52,264 @@ namespace Assessment1
 
         }
 
-        
-
-        private void button1_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Event triggered on pressing any key while focused on this textbox
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
+        private void textBox3_KeyDown(object sender, KeyEventArgs e)
         {
-            string executing_command = textBox3.Text.ToLower();
-            if (check_cmd.valid_execute_command(executing_command))
-            { 
-                Point panel_location = panel1.PointToScreen(Point.Empty);
-                
+            if (e.KeyCode == Keys.Enter)
+            {
+                //store number of errors
+                int error = 0;
+                //store executing command in lowercase
+                string executing_command = textBox3.Text.ToLower();
 
-                if (executing_command.Equals("clear"))
+                //if executing command is valid
+                if (check_cmd.Valid_execute_command(executing_command))
                 {
-                    g.Clear(Color.White);
-                }
-
-                if (executing_command.Equals("reset"))
-                {
-                    Cursor.Position = new Point(panel_location.X, panel_location.Y);
-                    initX = 0;
-                    initY = 0;
-                    color = Color.Black;
-                    fillshape = false;
-
-                }
-                if (executing_command.Equals("run"))
-                {
-                    count_line = 0;
-                    textBox2.Text = null;
-                    String[] lines = textBox1.Text.Trim().ToLower().Split(new String[] { Environment.NewLine }, StringSplitOptions.None);
-                    foreach (string draw in lines)
+                    //if executing command is clear
+                    if (executing_command.Equals("clear"))
                     {
-                        count_line++;
-                        if (check_cmd.check_command(draw)) { 
-                            string drawing_command = draw.Split('(')[0];
+                        g.Clear(Color.White);
+                    }
 
-                            if (drawing_command.Equals("moveto"))
+                    //if executing command is reset
+                    if (executing_command.Equals("reset"))
+                    {
+                        initX = 0;
+                        initY = 0;
+                    }
+
+                    //if executing command is run
+                    if (executing_command.Equals("run"))
+                    {
+                        //count current line number
+                        count_line = 0;
+                        //clear console
+                        textBox2.Text = null;
+                        //get string from textbox separated by newline and store into array
+                        String[] lines = textBox1.Text.Trim().ToLower().Split(new String[] {Environment.NewLine},
+                        StringSplitOptions.None);
+                        foreach (string Draw in lines)
+                        {
+                            count_line++;
+                            if (!check_cmd.Check_command(Draw))
                             {
-                                string positions = draw.Split('(', ')')[1];
-                                initX = int.Parse(positions.Split(',')[0]);
-                                initY = int.Parse(positions.Split(',')[1]);
-
-                                //calculate_coordinate(initX, initY);
-                                this.Cursor = new Cursor(Cursor.Current.Handle);
-                                Cursor.Position = new Point(panel_location.X + initX, panel_location.Y + initY);
+                                error++;
+                                textBox2.AppendText(Environment.NewLine + "Error on line "+count_line + " : " + check_cmd.error_list());
                             }
-
-                            if (drawing_command.Equals("drawto"))
+                            
+                            if (error == 0)
                             {
-                                Pen p1 = new Pen(color, 4);
-                                string positions = (draw.Split('(', ')')[1]);
-                                int pointX = int.Parse(positions.Split(',')[0]);
-                                int pointY = int.Parse(positions.Split(',')[1]);
+                                string Drawing_command = Draw.Split('(')[0].Trim();
 
-                                g.DrawLine(p1, initX, initY, pointX, pointY);
+                                if (Drawing_command.Equals("moveto"))
+                                {
+                                    string positions = Draw.Split('(', ')')[1];
+                                    initX = int.Parse(positions.Split(',')[0]);
+                                    initY = int.Parse(positions.Split(',')[1]);
+                                }
+
+                                if (Drawing_command.Equals("Drawto"))
+                                {
+                                    Pen p1 = new Pen(color, 4);
+                                    string positions = (Draw.Split('(', ')')[1]);
+                                    int pointX = int.Parse(positions.Split(',')[0]);
+                                    int pointY = int.Parse(positions.Split(',')[1]);
+
+                                    g.DrawLine(p1, initX, initY, pointX, pointY);
+                                }
+
+                                if (Drawing_command.Equals("pen"))
+                                {
+                                    string pen_color_name = (Draw.Split('(', ')')[1]);
+                                    if (pen_color_name.Contains("red"))
+                                    {
+                                        color = Color.Red;
+                                    }
+                                    else if (pen_color_name.Contains("green"))
+                                    {
+                                        color = Color.Green;
+                                    }
+                                    else if (pen_color_name.Contains("blue"))
+                                    {
+                                        color = Color.Blue;
+                                    }
+                                    else if (pen_color_name.Contains("black"))
+                                    {
+                                        color = Color.Black;
+                                    }
+                                    else if (pen_color_name.Contains("orange"))
+                                    {
+                                        color = Color.Orange;
+                                    }
+
+                                }
+                                if (Drawing_command.Equals("fill"))
+                                {
+                                    string fillstring = (Draw.Split('(', ')')[1]);
+                                    if (fillstring.Equals("on"))
+                                    {
+                                        fillshape = true;
+                                    }
+                                    else if (fillstring.Equals("off"))
+                                    {
+                                        fillshape = false;
+                                    }
+                                }
+
+                                if (Drawing_command.Equals("circle"))
+                                {
+                                    int radius = int.Parse(Draw.Split('(', ')')[1]);
+                                    s = factory.getShape("circle");
+                                    s.Set(color, fillshape, initX, initY, radius);
+                                    shape_list.Add(s);
+                                    
+                                }
+
+                                //Rectangle
+                                if (Drawing_command.Equals("rectangle"))
+                                {
+                                    string size = (Draw.Split('(', ')')[1]);
+                                    s = factory.getShape("rectangle");
+
+                                    int length = int.Parse(size.Split(',')[0]);
+                                    int width = int.Parse(size.Split(',')[1]);
+                                    s.Set(color, fillshape, initX, initY, length, width);
+                                    shape_list.Add(s);
+                                    
+
+                                }
+                                if (Drawing_command.Equals("triangle"))
+                                {
+                                    string size = (Draw.Split('(', ')')[1]);
+                                    s = factory.getShape("triangle");
+
+                                    int side1 = int.Parse(size.Split(',')[0]);
+                                    int side2 = int.Parse(size.Split(',')[1]);
+                                    int side3 = int.Parse(size.Split(',')[2]);
+
+                                    s.Set(color, fillshape, initX, initY, side1, side2, side3);
+                                    shape_list.Add(s);
+                                    
+                                }
                             }
-
-                            if (drawing_command.Equals("pen"))
-                            {
-                                string pen_color_name = (draw.Split('(', ')')[1]);
-                                if (pen_color_name.Contains("red"))
-                                {
-                                    color = Color.Red;
-                                }
-                                else if (pen_color_name.Contains("green"))
-                                {
-                                    color = Color.Green;
-                                }
-                                else if (pen_color_name.Contains("blue"))
-                                {
-                                    color = Color.Blue;
-                                }
-                                else if (pen_color_name.Contains("black"))
-                                {
-                                    color = Color.Black;
-                                }
-                                else if (pen_color_name.Contains("orange"))
-                                {
-                                    color = Color.Orange;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Supported Color are:\n Red \n Green \n Blue \n Black \n Orange", "Unsupported Color");
-                                }
-                            }
-                            if (drawing_command.Equals("fill"))
-                            {
-                                string fillstring = (draw.Split('(', ')')[1]);
-                                if (fillstring.Equals("on"))
-                                {
-                                    fillshape = true;
-                                }
-                                else if (fillstring.Equals("off"))
-                                {
-                                    fillshape = false;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Invalid Command. Commands are: on and off");
-                                }
-                            }
-
-                            if (drawing_command.Equals("circle"))
-                            {
-                                int radius = int.Parse(draw.Split('(', ')')[1]);
-                                s = factory.getShape("circle");
-                                s.set(color,fillshape, initX, initY, radius);
-                                s.draw(g);
-                            }
-
-                            //Rectangle
-                            if (drawing_command.Equals("rectangle"))
-                            {
-                                string size = (draw.Split('(', ')')[1]);
-                                s = factory.getShape("rectangle");
-
-                                int length = int.Parse(size.Split(',')[0]);
-                                int width = int.Parse(size.Split(',')[1]);
-                                s.set(color, fillshape, initX, initY, length, width);
-                                s.draw(g);
-
-                            }
-                            if (drawing_command.Equals("traingle"))
-                            {
-                                string size = (draw.Split('(', ')')[1]);
-                                s = factory.getShape("traingle");
-
-                                int side1 = int.Parse(size.Split(',')[0]);
-                                int side2 = int.Parse(size.Split(',')[1]);
-                                int side3 = int.Parse(size.Split(',')[2]);
-
-                                s.set(color, fillshape, initX, initY, side1, side2, side3);
-                                s.draw(g);
-                            }
+                            
                         }
+                        if (error != 0)
+                        {
+                            textBox2.AppendText(Environment.NewLine + "Please check all commands again.");
+                        }
+                        panel1.Refresh();
+
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Paint Event of panel1
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-
+            for (int i = 0; i < shape_list.Count; i++)
+            {
+                s = (Shape)shape_list[i];
+                s.Draw(g);
+            }
         }
 
-        public void error_display(string error)
-        {
-            string newline = Environment.NewLine;
-            textBox2.AppendText(newline + "Line " + count_line +" : " + error);
-        }
-
+        /// <summary>
+        /// Opens a save dialog to save commands into a text format document
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.Title = "Save Text File";
             saveFileDialog1.DefaultExt = "txt";
             saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.ShowDialog();
-            string path = saveFileDialog1.FileName;
-            File.WriteAllText(path, textBox1.Text);
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string path = saveFileDialog1.FileName;
+                File.WriteAllText(path, textBox1.Text);
+            }
         }
 
+        /// <summary>
+        /// Opens a open dialog to read text file and show commands
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.Title = "Browse Text Files";
             openFileDialog1.DefaultExt = "txt";
             openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog1.ShowDialog();
-            string path = openFileDialog1.FileName;
-            if (!string.IsNullOrEmpty(path))
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                string path = openFileDialog1.FileName;
                 string readfile = File.ReadAllText(path);
                 textBox1.Text = readfile;
             }
-            
+           
+
         }
 
+        /// <summary>
+        /// Shows list of program commands available
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void commandListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(" moveto(x-point,y-point) \n drawto(x-point,y-point) \n pen(color) \n fill(on || off) \n circle(radius) \n rectangle(length, breadth) \n traingle(side1, side2, side3)", "Valid Commands");
+            MessageBox.Show(" moveto(x-point,y-point) \n Drawto(x-point,y-point) \n pen(color) \n fill(on || off) \n circle(radius) \n rectangle(length, breadth) \n traingle(side1, side2, side3)", "Valid Commands");
         }
 
+        /// <summary>
+        /// Shows list of color options available
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void colorListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("You can use these colors:\n Red \n Green \n Blue \n Black \n Orange", "Valid Color");
         }
 
+        /// <summary>
+        /// Shows list of shapes commands available
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void shapeListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(" Circle \n Rectangle \n Traingle","Shape List");
+            MessageBox.Show(" Circle \n Rectangle \n Traingle", "Shape List");
         }
 
+        /// <summary>
+        /// Shows list of executing commands available
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void actionListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(" Run: Runs The Commands. \n Clear: Clear Painting Area \n Reset: Reset All Settings.", "Actions List");
+            MessageBox.Show(" Run: Runs The Commands. \n Clear: Clear Painting Area \n Reset: Reset All settings.", "Actions List");
         }
 
+        /// <summary>
+        /// Indicates that the event handler has already processed the event and dealt with it, so it doesn't need to be processed any further.
+        /// Disables user input for this textbox.
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
+
     }
 }

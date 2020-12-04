@@ -7,39 +7,62 @@ using System.Drawing;
 
 namespace Assessment1
 {
-    class circle:shape
+    /// <summary>
+    /// Class Circle inherits base class Shape
+    /// </summary>
+    class Circle :Shape
     {
         int radius;
 
-        public circle() : base()
+        /// <summary>
+        /// Call base class constructor
+        /// </summary>
+        public Circle() : base()
         {
 
         }
-
-        public circle(Color color, bool fillshape, int x, int y, int radius) : base(color,fillshape, x, y)
+        /// <summary>
+        /// Overloading Constructor and call overloaded base constructor
+        /// </summary>
+        /// <param name="color">Color Of Pen</param>
+        /// <param name="fillshape">Inner Fill Shapes</param>
+        /// <param name="x">X-axis Coordinate</param>
+        /// <param name="y">Y-axis Coordinate</param>
+        /// <param name="radius">Radius Of Circle</param>
+        public Circle(Color color, bool fillshape, int x, int y, int radius) : base(color, fillshape, x, y)
         {
             this.radius = radius;
         }
 
-        public override void set(Color colour, bool fill, params int[] list)
+        /// <summary>
+        /// New implementation of Set method that is inherited from a base class.
+        /// </summary>
+        /// <param name="colour">Color of pen</param>
+        /// <param name="fill">Inner fill shapes</param>
+        /// <param name="list">stores number of arguments</param>
+        public override void Set(Color colour, bool fill, params int[] list)
         {
             //list[0] is x, list[1] is y, list[2] is radius
-            base.set(colour, fill, list[0], list[1]);
+            base.Set(colour, fill, list[0], list[1]);
             this.radius = list[2];
         }
 
-        public override void draw(Graphics g)
+        /// <summary>
+        /// New implementation of Draw method that is inherited from a base class.
+        /// </summary>
+        /// <param name="g">GDi+ Drawing surface</param>
+        public override void Draw(Graphics g)
         {
 
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
             if (fill)
             {
-                g.FillEllipse(b, x, y, radius * 2, radius * 2);
+                g.FillEllipse(b, x, y, radius, radius);
             }
             else
             {
-                g.DrawEllipse(p, x, y, radius * 2, radius * 2);
+                g.DrawEllipse(p, x, y, radius, radius);
             }
             
 

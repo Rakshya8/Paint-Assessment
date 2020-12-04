@@ -6,30 +6,38 @@ using System.Threading.Tasks;
 
 namespace Assessment1
 {
+    /// <summary>
+/// Class ShapeFactory controls the type of shape object to create
+/// </summary>
     class ShapeFactory
     {
-        public shape getShape(String shapeType)
+        /// <summary>
+        /// check user requirement for shape and return that shape
+        /// </summary>
+        /// <param name="shapeType">Shape of object</param>
+        /// <returns>type of shape required</returns>
+        public Shape getShape(String shapeType)
         {
-            shapeType = shapeType.ToUpper().Trim(); //yoi could argue that you want a specific word string to create an object but I'm allowing any case combination
+            shapeType = shapeType.ToUpper().Trim();
 
 
             if (shapeType.Equals("CIRCLE"))
             {
-                return new circle();
+                return new Circle();
 
             }
             else if (shapeType.Equals("RECTANGLE"))
             {
-                return new rectangle();
+                return new Rectangle();
 
             }
-            else if (shapeType.Equals("TRAINGLE"))
+            else if (shapeType.Equals("TRIANGLE"))
             {
-               return new traingle();
+               return new Triangle();
             }
             else
             {
-                //if we get here then what has been passed in is inkown so throw an appropriate exception
+                
                 System.ArgumentException argEx = new System.ArgumentException("Factory error: " + shapeType + " does not exist");
                 throw argEx;
             }

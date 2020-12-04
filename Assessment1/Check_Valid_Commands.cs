@@ -8,15 +8,36 @@ using System.Collections;
 
 namespace Assessment1
 {
-    class Check_Valid_Commands
+    /// <summary>
+    /// Check if given commands are valid
+    /// </summary>
+   public class Check_Valid_Commands
     {
         Form1 form;
+        ArrayList errors = new ArrayList();
+
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public Check_Valid_Commands()
+        {
+
+        }
+        /// <summary>
+        /// Constructor with form object as parameter
+        /// </summary>
+        /// <param name="frm">Object of Form1</param>
         public Check_Valid_Commands(Form1 frm)
         {
             form = frm;
         }
 
-        public bool valid_execute_command(string command)
+        /// <summary>
+        /// Check for valid execution commands
+        /// </summary>
+        /// <param name="command">executing command</param>
+        /// <returns>true if valid and false if invalid</returns>
+        public bool Valid_execute_command(string command)
         {
             string valid_cmd = command;
             if (valid_cmd.Equals("run") || valid_cmd.Equals("reset") || valid_cmd.Equals("clear"))
@@ -29,17 +50,31 @@ namespace Assessment1
             }
         }
 
-        public bool check_command(string command)
+        /// <summary>
+        /// Check for valid program commands
+        /// </summary>
+        /// <param name="command">program commands</param>
+        /// <returns>true if valid and false if invalid</returns>
+        public bool Check_command(string command)
         {
-            
-            string draw_cmd = command.Split('(')[0];
-            if (draw_cmd.Equals("moveto") || draw_cmd.Equals("drawto") || draw_cmd.Equals("pen") || draw_cmd.Equals("fill") || draw_cmd.Equals("circle") || draw_cmd.Equals("rectangle") || draw_cmd.Equals("traingle"))
-            {
-                string value_inside_brackets = command.Split('(', ')')[1];
-                string[] parameters = value_inside_brackets.Split(',');
 
-                //check moveto and drawto command
-                if (draw_cmd.Equals("moveto") || draw_cmd.Equals("drawto"))
+            string Draw_cmd = command.Split('(')[0].Trim();
+            if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle"))
+            {
+                string value_inside_brackets = null;
+                string[] parameters = null;
+                if (command.Split('(', ')').Length > 1)
+                {
+                    value_inside_brackets = command.Split('(', ')')[1];
+                    parameters = value_inside_brackets.Split(',');
+                }
+                else
+                {
+                    errors.Add("Parameters Missing");
+                    return false;
+                }
+                //check moveto and Drawto command
+                if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto"))
                 {
                     if (parameters.Length == 2)
                     {
@@ -51,21 +86,20 @@ namespace Assessment1
                         }
                         catch (FormatException)
                         {
-
-                            form.error_display("X and Y points should be in numbers (0-9)");
+                            errors.Add("X and Y points should be in numbers (0-9)");
                             return false;
                         }
                     }
                     else
                     {
-                        form.error_display("Only 2 parameters allowed.");
+                        errors.Add("2 parameters needed.");
                         return false;
                     }
                 }
-                //end of check moveto and drawto command
+                //end of check moveto and Drawto command
 
                 //check pen command
-                if (draw_cmd.Equals("pen"))
+                if (Draw_cmd.Equals("pen"))
                 {
                     if (!value_inside_brackets.Contains(','))
                     {
@@ -75,13 +109,13 @@ namespace Assessment1
                         }
                         else
                         {
-                            form.error_display("Color not supported.");
+                            errors.Add("Color not supported.");
                             return false;
                         }
                     }
                     else
                     {
-                        form.error_display("Only 1 parameter allowed.");
+                        errors.Add("1 parameter needed.");
                         return false;
                     }
 
@@ -89,7 +123,7 @@ namespace Assessment1
                 //end of pen command
 
                 //check fill command
-                if (draw_cmd.Equals("fill"))
+                if (Draw_cmd.Equals("fill"))
                 {
 
                     if (!value_inside_brackets.Contains(','))
@@ -100,13 +134,13 @@ namespace Assessment1
                         }
                         else
                         {
-                            form.error_display("Invalid Option.");
+                            errors.Add("Invalid Option.");
                             return false;
                         }
                     }
                     else
                     {
-                        form.error_display("Only 1 parameter allowed.");
+                        errors.Add("Only 1 parameter allowed.");
                         return false;
                     }
 
@@ -114,7 +148,7 @@ namespace Assessment1
                 //end fill command
 
                 //check circle command
-                if (draw_cmd.Equals("circle"))
+                if (Draw_cmd.Equals("circle"))
                 {
                     if (parameters.Length == 1)
                     {
@@ -125,20 +159,20 @@ namespace Assessment1
                         }
                         catch (FormatException)
                         {
-                            form.error_display("Radius should be in numbers (0-9).");
+                            errors.Add("Radius should be in numbers (0-9).");
                             return false;
                         }
                     }
                     else
                     {
-                        form.error_display("Only 1 parameter allowed.");
+                        errors.Add("1 parameter needed.");
                         return false;
                     }
                 }
                 //end circle command
 
                 //check rectangle command
-                if (draw_cmd.Equals("rectangle"))
+                if (Draw_cmd.Equals("rectangle"))
                 {
 
                     if (parameters.Length == 2)
@@ -151,20 +185,20 @@ namespace Assessment1
                         }
                         catch (FormatException)
                         {
-                            form.error_display("Length and breadth should be in numbers (0-9).");
+                            errors.Add("Length and breadth should be in numbers (0-9).");
                             return false;
                         }
                     }
                     else
                     {
-                        form.error_display("Only 2 parameters allowed.");
+                        errors.Add("2 parameters needed.");
                         return false;
                     }
                 }
                 //end rectangle command
 
-                //check traingle command
-                if (draw_cmd.Equals("traingle"))
+                //check triangle command
+                if (Draw_cmd.Equals("triangle"))
                 {
                     if (parameters.Length == 3)
                     {
@@ -177,26 +211,38 @@ namespace Assessment1
                         }
                         catch (FormatException)
                         {
-                            form.error_display("Sides should be in numbers (0-9).");
+                            errors.Add("Sides should be in numbers (0-9).");
                             return false;
                         }
                     }
                     else
                     {
-                        form.error_display("Only 3 parameters allowed.");
+                        errors.Add("3 parameters needed.");
                         return false;
                     }
                 }
-                //end traingle command
-
+                //end triangle command
             }
             else
             {
-                form.error_display("Invalid Command.");
+                errors.Add("Invalid Command.");
                 return false;
             }
-
             return false;
+        }
+
+        /// <summary>
+        /// Stores list of errors found during command validation
+        /// </summary>
+        /// <returns></returns>
+        public string error_list()
+        {
+            string error = null;
+            foreach(string err in errors)
+            {
+                error = err;
+            }
+            return error;
         }
 
     }
