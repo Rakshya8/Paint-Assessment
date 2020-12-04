@@ -234,7 +234,7 @@ namespace Assessment1
         /// <summary>
         /// Stores list of errors found during command validation
         /// </summary>
-        /// <returns></returns>
+        /// <returns>returns list of errors</returns>
         public string error_list()
         {
             string error = null;

@@ -32,6 +32,8 @@ namespace Assessment1
         //count line of commands
         int count_line = 0;
 
+        ArrayList drawline = new ArrayList();
+
         //default Settings
         //store pen color
         Color color = Color.Black;
@@ -73,18 +75,24 @@ namespace Assessment1
                     if (executing_command.Equals("clear"))
                     {
                         g.Clear(Color.White);
+                        shape_list.Clear();
+                        drawline.Clear();
                     }
 
                     //if executing command is reset
                     if (executing_command.Equals("reset"))
                     {
+                        fillshape = false;
+                        color = Color.Black;
                         initX = 0;
                         initY = 0;
+                        textBox2.AppendText("Moved to 0,0");
                     }
 
                     //if executing command is run
                     if (executing_command.Equals("run"))
                     {
+                        
                         //count current line number
                         count_line = 0;
                         //clear console
@@ -112,14 +120,19 @@ namespace Assessment1
                                     initY = int.Parse(positions.Split(',')[1]);
                                 }
 
-                                if (Drawing_command.Equals("Drawto"))
+                                if (Drawing_command.Equals("drawto"))
                                 {
                                     Pen p1 = new Pen(color, 4);
                                     string positions = (Draw.Split('(', ')')[1]);
                                     int pointX = int.Parse(positions.Split(',')[0]);
                                     int pointY = int.Parse(positions.Split(',')[1]);
-
-                                    g.DrawLine(p1, initX, initY, pointX, pointY);
+                                    
+                                    drawline.Add(p1);
+                                    drawline.Add(initX);
+                                    drawline.Add(initY);
+                                    drawline.Add(pointX);
+                                    drawline.Add(pointY);                                   
+                                    //g.DrawLine(p1, initX, initY, pointX, pointY);
                                 }
 
                                 if (Drawing_command.Equals("pen"))
@@ -221,6 +234,21 @@ namespace Assessment1
                 s = (Shape)shape_list[i];
                 s.Draw(g);
             }
+
+            if(drawline.Count != 0)
+            {
+                int no_of_draw = drawline.Count / 5;
+                
+                for(int i=0; i < no_of_draw; i++)
+                {
+                    for(int j=0; j < drawline.Count; j = j + 5)
+                    {
+                        g.DrawLine((Pen)drawline[j], (int)drawline[j + 1], (int)drawline[j + 2], (int)drawline[j + 3], (int)drawline[j + 4]);
+                    }
+                    
+                }
+                               
+            }
         }
 
         /// <summary>
@@ -237,6 +265,7 @@ namespace Assessment1
             {
                 string path = saveFileDialog1.FileName;
                 File.WriteAllText(path, textBox1.Text);
+                textBox2.AppendText("File Saved: " + path);
             }
         }
 
@@ -255,6 +284,7 @@ namespace Assessment1
                 string path = openFileDialog1.FileName;
                 string readfile = File.ReadAllText(path);
                 textBox1.Text = readfile;
+                textBox2.AppendText("File loaded: " + path);
             }
            
 

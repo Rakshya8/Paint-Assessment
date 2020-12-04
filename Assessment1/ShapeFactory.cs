@@ -9,7 +9,7 @@ namespace Assessment1
     /// <summary>
 /// Class ShapeFactory controls the type of shape object to create
 /// </summary>
-    class ShapeFactory
+     class ShapeFactory
     {
         /// <summary>
         /// check user requirement for shape and return that shape
