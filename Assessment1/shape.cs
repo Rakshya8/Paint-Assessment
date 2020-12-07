@@ -28,7 +28,7 @@ namespace Assessment1
         /// <summary>
         /// Overloading constructor with parameters
         /// </summary>
-        /// <param name="color">Color Of Pen</param>
+        /// <param name="colour">Color Of Pen</param>
         /// <param name="fillshape">Inner Fill Shapes</param>
         /// <param name="x">X-axis Coordinate</param>
         /// <param name="y">Y-axis Coordinate</param>
@@ -51,7 +51,7 @@ namespace Assessment1
         /// Override set method derived from base class
         /// </summary>
         /// <param name="colour">Color of pen</param>
-        /// <param name="fill">Inner fill shapes</param>
+        /// <param name="fillshape">Inner fill shapes</param>
         /// <param name="list">stores number of arguments</param>
         public virtual void Set(Color colour, bool fillshape, params int[] list)
         {

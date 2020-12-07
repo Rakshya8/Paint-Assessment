@@ -66,6 +66,8 @@ namespace Assessment1
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
             PointF[] points = new PointF[3];
+
+
             points[0].X = x;
             points[0].Y = y;
 
@@ -73,7 +75,7 @@ namespace Assessment1
             points[1].Y = y;
 
             points[2].X = x + side3;
-            points[2].Y = y - side2;
+            points[2].Y = y + side2;
             if (fill)
             {
                 g.FillPolygon(b, points);

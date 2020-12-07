@@ -11,7 +11,7 @@ namespace Assessment1
     /// <summary>
     /// Check if given commands are valid
     /// </summary>
-   public class Check_Valid_Commands
+    public class Check_Valid_Commands
     {
         Form1 form;
         ArrayList errors = new ArrayList();
@@ -59,7 +59,7 @@ namespace Assessment1
         {
 
             string Draw_cmd = command.Split('(')[0].Trim();
-            if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle"))
+            if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon"))
             {
                 string value_inside_brackets = null;
                 string[] parameters = null;
@@ -166,6 +166,30 @@ namespace Assessment1
                     else
                     {
                         errors.Add("1 parameter needed.");
+                        return false;
+                    }
+                }
+                //end circle command
+
+                //check circle command
+                if (Draw_cmd.Equals("polygon"))
+                {
+                    if (parameters.Length % 2 == 0 && parameters.Length >= 4)
+                    {
+                        try
+                        {
+                            Array.ConvertAll(parameters, int.Parse);
+                            return true;
+                        }
+                        catch (FormatException)
+                        {
+                            errors.Add("Points should be in numbers.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        errors.Add("Minimum 2 points (4 parameters) needed.");
                         return false;
                     }
                 }

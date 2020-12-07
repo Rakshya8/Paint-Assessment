@@ -15,8 +15,8 @@ namespace Assessment1
         /// <summary>
         /// Set properties of shape
         /// </summary>
-        /// <param name="colour">Color of pen</param>
-        /// <param name="fill">Inner fill shapes</param>
+        /// <param name="c">Color of pen</param>
+        /// <param name="fillshape">Inner fill shapes</param>
         /// <param name="list">stores number of arguments</param>
         void Set(Color c, bool fillshape, params int[] list);
         

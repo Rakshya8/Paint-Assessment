@@ -18,7 +18,7 @@ namespace Assessment1
     public partial class Form1 : Form
     {
         //GDI+ Drawing surface
-        Graphics g;
+        Graphics graphics;
         //Object of class ShapeFactory
         ShapeFactory factory;
         //Object of class Shape
@@ -48,7 +48,7 @@ namespace Assessment1
         public Form1()
         {
             InitializeComponent();
-            g = panel1.CreateGraphics();
+            graphics = panel1.CreateGraphics();
             factory = new ShapeFactory();
             check_cmd = new Check_Valid_Commands(this);
 
@@ -63,6 +63,7 @@ namespace Assessment1
         {
             if (e.KeyCode == Keys.Enter)
             {
+                e.SuppressKeyPress = true;
                 //store number of errors
                 int error = 0;
                 //store executing command in lowercase
@@ -74,7 +75,7 @@ namespace Assessment1
                     //if executing command is clear
                     if (executing_command.Equals("clear"))
                     {
-                        g.Clear(Color.White);
+                        graphics.Clear(Color.White);
                         shape_list.Clear();
                         drawline.Clear();
                     }
@@ -193,8 +194,10 @@ namespace Assessment1
                                     s.Set(color, fillshape, initX, initY, length, width);
                                     shape_list.Add(s);
                                     
-
                                 }
+                                //End Rectangle
+
+                                //Start Triangle
                                 if (Drawing_command.Equals("triangle"))
                                 {
                                     string size = (Draw.Split('(', ')')[1]);
@@ -208,6 +211,20 @@ namespace Assessment1
                                     shape_list.Add(s);
                                     
                                 }
+
+                                //End Triangle
+
+                                //Start Polygon
+                                if (Drawing_command.Equals("polygon"))
+                                {
+                                    string param = initX + "," + initY + "," +(Draw.Split('(', ')')[1]);
+                                    int[] points = Array.ConvertAll(param.Split(','), int.Parse);                                   
+                                    s = factory.getShape("polygon");                                   
+                                    s.Set(color, fillshape, points);
+                                    shape_list.Add(s);
+
+                                }
+                                //End Polygon
                             }
                             
                         }
@@ -232,7 +249,7 @@ namespace Assessment1
             for (int i = 0; i < shape_list.Count; i++)
             {
                 s = (Shape)shape_list[i];
-                s.Draw(g);
+                s.Draw(graphics);
             }
 
             if(drawline.Count != 0)
@@ -243,7 +260,7 @@ namespace Assessment1
                 {
                     for(int j=0; j < drawline.Count; j = j + 5)
                     {
-                        g.DrawLine((Pen)drawline[j], (int)drawline[j + 1], (int)drawline[j + 2], (int)drawline[j + 3], (int)drawline[j + 4]);
+                        graphics.DrawLine((Pen)drawline[j], (int)drawline[j + 1], (int)drawline[j + 2], (int)drawline[j + 3], (int)drawline[j + 4]);
                     }
                     
                 }

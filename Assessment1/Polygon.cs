@@ -4,21 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Collections;
 
 namespace Assessment1
 {
     /// <summary>
-    /// Class Rectangle inherits base class Shape
+    /// Class Polygon inherits base class Shape
     /// </summary>
-    class Rectangle : Shape
+    class Polygon : Shape
     {
-        int length;
-        int width;
-
+        int[] points_list;
         /// <summary>
         /// Call base class constructor
         /// </summary>
-        public Rectangle() : base()
+        public Polygon() : base()
         {
 
         }
@@ -29,29 +28,23 @@ namespace Assessment1
         /// <param name="fillshape">Inner Fill Shapes</param>
         /// <param name="x">X-axis Coordinate</param>
         /// <param name="y">Y-axis Coordinate</param>
-        /// <param name="length">Length of Rectangle</param>
-        /// <param name="width">Width of Rectangle</param>
-        public Rectangle(Color color, bool fillshape, int x, int y, int length, int width) : base(color, fillshape, x, y)
+        /// <param name="points">polygon points</param>
+        public Polygon(Color color, bool fillshape, int x, int y, params int[] points) : base(color, fillshape, x, y)
         {
-
-            this.width = width;
-            this.length = length;
-
+            points_list = points;
         }
 
         /// <summary>
         /// New implementation of Set method that is inherited from a base class.
         /// </summary>
-        /// <param name="color">Color of pen</param>
+        /// <param name="colour">Color of pen</param>
         /// <param name="fill">Inner fill shapes</param>
         /// <param name="list">stores number of arguments</param>
-        public override void Set(Color color, bool fill, params int[] list)
+        public override void Set(Color colour, bool fill, params int[] list)
         {
-       
-            base.Set(color, fill, list[0], list[1]);
-            this.length = list[2];
-            this.width = list[3];
-
+            //list[0] is x, list[1] is y, list[2] is radius
+            base.Set(colour, fill, list[0], list[1]);
+            this.points_list = list;            
         }
 
         /// <summary>
@@ -59,20 +52,24 @@ namespace Assessment1
         /// </summary>
         /// <param name="g">GDi+ Drawing surface</param>
         public override void Draw(Graphics g)
-        {
-
+        {          
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
+            Point[] points = new Point[points_list.Length];
+            int point_position = 0;
+            for (int i = 0; i < points_list.Length; i += 2)
+            {
+                points[point_position] = new Point(points_list[i], points_list[i + 1]);
+                point_position++;
+            }
             if (fill)
             {
-                g.FillRectangle(b, x, y, length, width);
+                g.FillPolygon(b, points);
             }
             else
             {
-                g.DrawRectangle(p, x, y, length, width);
+                g.DrawPolygon(p, points);
             }
-
-
         }
     }
 }

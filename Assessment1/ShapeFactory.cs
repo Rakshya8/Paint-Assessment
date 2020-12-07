@@ -35,6 +35,10 @@ namespace Assessment1
             {
                return new Triangle();
             }
+            else if (shapeType.Equals("POLYGON"))
+            {
+                return new Polygon();
+            }
             else
             {
                 
