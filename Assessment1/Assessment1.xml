@@ -4,6 +4,12 @@
         <name>Assessment1</name>
     </assembly>
     <members>
+        <member name="M:Assessment1.BasicDrawing.getShape">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Assessment1.Check_Valid_Commands">
             <summary>
             Check if given commands are valid
@@ -27,6 +33,33 @@
             <param name="command">executing command</param>
             <returns>true if valid and false if invalid</returns>
         </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_command_type(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="cmd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_variable(System.String)">
+            <summary>
+            Check validitiy of complex commands
+            </summary>
+            <param name="command">command to be checked</param>
+            <returns></returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_if_command(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.getOperator">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Assessment1.Check_Valid_Commands.Check_command(System.String)">
             <summary>
             Check for valid program commands
@@ -42,7 +75,7 @@
         </member>
         <member name="T:Assessment1.Polygon">
             <summary>
-            Class Circle inherits base class Shape
+            Class Polygon inherits base class Shape
             </summary>
         </member>
         <member name="M:Assessment1.Polygon.#ctor">

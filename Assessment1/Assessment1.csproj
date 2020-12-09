@@ -62,7 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicDrawing.cs" />
     <Compile Include="Check_Valid_Commands.cs" />
+    <Compile Include="ComplexDrawing.cs" />
+    <Compile Include="CustomExceptions.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="Circle.cs" />

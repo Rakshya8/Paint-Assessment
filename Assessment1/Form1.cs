@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+using System.Text.RegularExpressions;
 using System.IO;
 
 namespace Assessment1
@@ -19,19 +20,27 @@ namespace Assessment1
     {
         //GDI+ Drawing surface
         Graphics graphics;
-        //Object of class ShapeFactory
-        ShapeFactory factory;
+
+        //Object of class BasicDrawing
+        BasicDrawing bd = new BasicDrawing();
         //Object of class Shape
         Shape s;
+
         //Object of class Check_Valid_Commands
         Check_Valid_Commands check_cmd;
         //store list of objects.
         ArrayList shape_list = new ArrayList();
+        ArrayList if_commands = new ArrayList();
         //checks if fill is on/off
         private bool fillshape = false;
         //count line of commands
         int count_line = 0;
-
+        IDictionary<string,
+        int> variable = new Dictionary<string,
+        int>();
+        IDictionary<string,
+        int> if_statement = new Dictionary<string,
+        int>();
         ArrayList drawline = new ArrayList();
 
         //default Settings
@@ -49,7 +58,6 @@ namespace Assessment1
         {
             InitializeComponent();
             graphics = panel1.CreateGraphics();
-            factory = new ShapeFactory();
             check_cmd = new Check_Valid_Commands(this);
 
         }
@@ -93,140 +101,215 @@ namespace Assessment1
                     //if executing command is run
                     if (executing_command.Equals("run"))
                     {
-                        
+
                         //count current line number
                         count_line = 0;
                         //clear console
                         textBox2.Text = null;
                         //get string from textbox separated by newline and store into array
-                        String[] lines = textBox1.Text.Trim().ToLower().Split(new String[] {Environment.NewLine},
+                        String[] lines = textBox1.Text.Trim().ToLower().Split(new String[] {
+              Environment.NewLine
+            },
                         StringSplitOptions.None);
                         foreach (string Draw in lines)
                         {
+
+                            string command_type = check_cmd.check_command_type(Draw);
+
+                            //if-command-start
+                            if (command_type.Equals("if"))
+                            {
+                                if (check_cmd.check_if_command(Draw))
+                                {
+                                    string condition = Draw.Split('(', ')')[1].Trim();
+                                    string operators = check_cmd.getOperator();
+                                    string[] splitCondition = condition.Split(new string[] {
+                    operators
+                  },
+                                    StringSplitOptions.RemoveEmptyEntries);
+                                    if (splitCondition.Length == 2)
+                                    {
+                                        string conditionKey = splitCondition[0].Trim();
+                                        int conditionValue = int.Parse(splitCondition[1].Trim());
+                                        foreach (KeyValuePair<string, int> kvp in variable)
+                                        {
+                                            if (conditionKey == kvp.Key)
+                                            {
+                                                int variableValue = kvp.Value;
+
+                                                bool conditionStatus = false;
+
+                                                int value1 = variableValue;
+                                                int value2 = conditionValue;
+
+                                                if (operators == "<=")
+                                                {
+                                                    if (value1 <= value2) conditionStatus = true;
+                                                }
+                                                else if (operators == ">=")
+                                                {
+                                                    if (value1 >= value2) conditionStatus = true;
+                                                }
+                                                else if (operators == "=")
+                                                {
+                                                    if (value1 == value2) conditionStatus = true;
+                                                }
+                                                else if (operators == ">")
+                                                {
+                                                    if (value1 > value2) conditionStatus = true;
+                                                }
+                                                else if (operators == "<")
+                                                {
+                                                    if (value1 < value2) conditionStatus = true;
+                                                }
+                                                else if (operators == "!=")
+                                                {
+                                                    if (value1 != value2) conditionStatus = true;
+                                                }
+
+                                                if (conditionStatus)
+                                                {
+                                                    for (int i = (count_line + 1); i < lines.Length; i++)
+                                                    {
+                                                        while (!lines[i + 1].Contains("endif"))
+                                                        {
+                                                            if_commands.Add(lines[i]);
+                                                        }
+                                                    }
+                                                    textBox2.AppendText(if_commands + "");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                throw (new CustomExceptions("Variable: " + conditionKey + "doesn't exist."));
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        throw (new CustomExceptions("Invalid If EndIf Statement"));
+                                    }
+                                }
+                                else
+                                {
+                                    throw (new CustomExceptions("Invalid If EndIf Statement"));
+                                }
+
+                            }
+                            //if-command-end
+                            else if (command_type.Equals("loop"))
+                            {
+
+                            }
+                            else if (command_type.Equals("method"))
+                            {
+
+                            }
+                            else if (command_type.Equals("drawing_commands"))
+                            {
+                                if (!check_cmd.Check_command(Draw))
+                                {
+                                    error++;
+                                    textBox2.AppendText(Environment.NewLine + "Error on line " + count_line + " : " + check_cmd.error_list());
+                                }
+
+                                if (error == 0)
+                                {
+                                    string Drawing_command = Draw.Split('(')[0].Trim();
+
+                                    if (Drawing_command.Equals("moveto"))
+                                    {
+                                        string positions = Draw.Split('(', ')')[1];
+                                        initX = int.Parse(positions.Split(',')[0]);
+                                        initY = int.Parse(positions.Split(',')[1]);
+                                    }
+
+                                    if (Drawing_command.Equals("drawto"))
+                                    {
+                                        Pen p1 = new Pen(color, 4);
+                                        string positions = (Draw.Split('(', ')')[1]);
+                                        int pointX = int.Parse(positions.Split(',')[0]);
+                                        int pointY = int.Parse(positions.Split(',')[1]);
+
+                                        drawline.Add(p1);
+                                        drawline.Add(initX);
+                                        drawline.Add(initY);
+                                        drawline.Add(pointX);
+                                        drawline.Add(pointY);
+                                        //g.DrawLine(p1, initX, initY, pointX, pointY);
+                                    }
+
+                                    if (Drawing_command.Equals("pen"))
+                                    {
+                                        string pen_color_name = (Draw.Split('(', ')')[1]);
+                                        if (pen_color_name.Contains("red"))
+                                        {
+                                            color = Color.Red;
+                                        }
+                                        else if (pen_color_name.Contains("green"))
+                                        {
+                                            color = Color.Green;
+                                        }
+                                        else if (pen_color_name.Contains("blue"))
+                                        {
+                                            color = Color.Blue;
+                                        }
+                                        else if (pen_color_name.Contains("black"))
+                                        {
+                                            color = Color.Black;
+                                        }
+                                        else if (pen_color_name.Contains("orange"))
+                                        {
+                                            color = Color.Orange;
+                                        }
+
+                                    }
+                                    if (Drawing_command.Equals("fill"))
+                                    {
+                                        string fillstring = (Draw.Split('(', ')')[1]);
+                                        if (fillstring.Equals("on"))
+                                        {
+                                            fillshape = true;
+                                        }
+                                        else if (fillstring.Equals("off"))
+                                        {
+                                            fillshape = false;
+                                        }
+                                    }
+                                    if (Drawing_command.Equals("circle") || Drawing_command.Equals("triangle") || Drawing_command.Equals("rectangle") || Drawing_command.Equals("polygon"))
+                                    {
+                                        bd.SetBasicDrawing(Draw, color, fillshape, initX, initY);
+                                    }
+                                }
+
+                                else
+                                {
+
+                                }
+
+                            }
+                            else if (command_type.Equals("variable"))
+                            {
+                                if (check_cmd.check_variable(Draw))
+                                {
+                                    string variable_name = Draw.Split('=')[0].Trim();
+                                    int variable_value = int.Parse(Draw.Split('=')[1].Trim());
+
+                                    if (!variable.ContainsKey(variable_name))
+                                    {
+                                        variable.Add(variable_name, variable_value);
+                                    }
+                                    else
+                                    {
+                                        variable[variable_name] = variable_value;
+                                    }
+                                }
+                                else
+                                {
+                                    error++;
+                                }
+                            }
                             count_line++;
-                            if (!check_cmd.Check_command(Draw))
-                            {
-                                error++;
-                                textBox2.AppendText(Environment.NewLine + "Error on line "+count_line + " : " + check_cmd.error_list());
-                            }
-                            
-                            if (error == 0)
-                            {
-                                string Drawing_command = Draw.Split('(')[0].Trim();
-
-                                if (Drawing_command.Equals("moveto"))
-                                {
-                                    string positions = Draw.Split('(', ')')[1];
-                                    initX = int.Parse(positions.Split(',')[0]);
-                                    initY = int.Parse(positions.Split(',')[1]);
-                                }
-
-                                if (Drawing_command.Equals("drawto"))
-                                {
-                                    Pen p1 = new Pen(color, 4);
-                                    string positions = (Draw.Split('(', ')')[1]);
-                                    int pointX = int.Parse(positions.Split(',')[0]);
-                                    int pointY = int.Parse(positions.Split(',')[1]);
-                                    
-                                    drawline.Add(p1);
-                                    drawline.Add(initX);
-                                    drawline.Add(initY);
-                                    drawline.Add(pointX);
-                                    drawline.Add(pointY);                                   
-                                    //g.DrawLine(p1, initX, initY, pointX, pointY);
-                                }
-
-                                if (Drawing_command.Equals("pen"))
-                                {
-                                    string pen_color_name = (Draw.Split('(', ')')[1]);
-                                    if (pen_color_name.Contains("red"))
-                                    {
-                                        color = Color.Red;
-                                    }
-                                    else if (pen_color_name.Contains("green"))
-                                    {
-                                        color = Color.Green;
-                                    }
-                                    else if (pen_color_name.Contains("blue"))
-                                    {
-                                        color = Color.Blue;
-                                    }
-                                    else if (pen_color_name.Contains("black"))
-                                    {
-                                        color = Color.Black;
-                                    }
-                                    else if (pen_color_name.Contains("orange"))
-                                    {
-                                        color = Color.Orange;
-                                    }
-
-                                }
-                                if (Drawing_command.Equals("fill"))
-                                {
-                                    string fillstring = (Draw.Split('(', ')')[1]);
-                                    if (fillstring.Equals("on"))
-                                    {
-                                        fillshape = true;
-                                    }
-                                    else if (fillstring.Equals("off"))
-                                    {
-                                        fillshape = false;
-                                    }
-                                }
-
-                                if (Drawing_command.Equals("circle"))
-                                {
-                                    int radius = int.Parse(Draw.Split('(', ')')[1]);
-                                    s = factory.getShape("circle");
-                                    s.Set(color, fillshape, initX, initY, radius);
-                                    shape_list.Add(s);
-                                    
-                                }
-
-                                //Rectangle
-                                if (Drawing_command.Equals("rectangle"))
-                                {
-                                    string size = (Draw.Split('(', ')')[1]);
-                                    s = factory.getShape("rectangle");
-
-                                    int length = int.Parse(size.Split(',')[0]);
-                                    int width = int.Parse(size.Split(',')[1]);
-                                    s.Set(color, fillshape, initX, initY, length, width);
-                                    shape_list.Add(s);
-                                    
-                                }
-                                //End Rectangle
-
-                                //Start Triangle
-                                if (Drawing_command.Equals("triangle"))
-                                {
-                                    string size = (Draw.Split('(', ')')[1]);
-                                    s = factory.getShape("triangle");
-
-                                    int side1 = int.Parse(size.Split(',')[0]);
-                                    int side2 = int.Parse(size.Split(',')[1]);
-                                    int side3 = int.Parse(size.Split(',')[2]);
-
-                                    s.Set(color, fillshape, initX, initY, side1, side2, side3);
-                                    shape_list.Add(s);
-                                    
-                                }
-
-                                //End Triangle
-
-                                //Start Polygon
-                                if (Drawing_command.Equals("polygon"))
-                                {
-                                    string param = initX + "," + initY + "," +(Draw.Split('(', ')')[1]);
-                                    int[] points = Array.ConvertAll(param.Split(','), int.Parse);                                   
-                                    s = factory.getShape("polygon");                                   
-                                    s.Set(color, fillshape, points);
-                                    shape_list.Add(s);
-
-                                }
-                                //End Polygon
-                            }
-                            
                         }
                         if (error != 0)
                         {
@@ -246,25 +329,26 @@ namespace Assessment1
         /// <param name="e">contains the event data</param>
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            shape_list = bd.getShape();
             for (int i = 0; i < shape_list.Count; i++)
             {
                 s = (Shape)shape_list[i];
                 s.Draw(graphics);
             }
 
-            if(drawline.Count != 0)
+            if (drawline.Count != 0)
             {
                 int no_of_draw = drawline.Count / 5;
-                
-                for(int i=0; i < no_of_draw; i++)
+
+                for (int i = 0; i < no_of_draw; i++)
                 {
-                    for(int j=0; j < drawline.Count; j = j + 5)
+                    for (int j = 0; j < drawline.Count; j = j + 5)
                     {
                         graphics.DrawLine((Pen)drawline[j], (int)drawline[j + 1], (int)drawline[j + 2], (int)drawline[j + 3], (int)drawline[j + 4]);
                     }
-                    
+
                 }
-                               
+
             }
         }
 
@@ -303,7 +387,6 @@ namespace Assessment1
                 textBox1.Text = readfile;
                 textBox2.AppendText("File loaded: " + path);
             }
-           
 
         }
 

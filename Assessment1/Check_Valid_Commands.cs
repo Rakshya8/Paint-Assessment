@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using System.Collections;
 
 namespace Assessment1
@@ -15,6 +16,7 @@ namespace Assessment1
     {
         Form1 form;
         ArrayList errors = new ArrayList();
+        private string conditionOperator = null;
 
         /// <summary>
         /// Default Constructor
@@ -51,6 +53,144 @@ namespace Assessment1
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public string check_command_type(string cmd)
+        {
+            string[] command = cmd.Split(' ');
+            string type = null;
+            if (command[0].Equals("if"))
+            {
+                type = "if";
+            }
+            else if (command[0].Equals("loop") && command[1].Equals("for"))
+            {
+                type = "loop";
+            }
+            else if (command[0].Equals("method"))
+            {
+                type = "method";
+            }
+            else if (command[0].Equals("moveto") || command[0].Equals("drawto") || command[0].Equals("pen") || command[0].Equals("fill") || command[0].Equals("circle") || command[0].Equals("rectangle") || command[0].Equals("triangle") || command[0].Equals("polygon"))
+            {
+                type = "drawing_commands";
+            }
+            else
+            {
+                
+                if(cmd.Split('=').Length == 2) {
+                    //string variable_name = cmd.Split('=')[0].Trim();
+                    //string variable_value = cmd.Split('=')[1].Trim();
+
+                    type = "variable";
+                }
+                else
+                {
+                    type = "invalid";
+                }
+                              
+            }
+            return type;
+        }
+
+        /// <summary>
+        /// Check validitiy of complex commands
+        /// </summary>
+        /// <param name="command">command to be checked</param>
+        /// <returns></returns>
+        public bool check_variable(string command)
+        {
+            string variable_name = command.Split('=')[0].Trim();
+            string first_char = variable_name.Substring(0, 1);
+            if(Regex.IsMatch(first_char, @"^[a-zA-Z]+$"))
+            {
+                if (Regex.IsMatch(variable_name, @"^[a-zA-Z0-9]+$"))
+                {
+                    try
+                    {
+                        int.Parse(command.Split('=')[1].Trim());
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                        throw (new CustomExceptions("Variable value should be in number format."));                        
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw (new CustomExceptions("Variable name should start with alphabet."));
+            }        
+           
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public bool check_if_command(string command)
+        {
+            string condition;
+            if (command.Split('(', ')').Length > 1){
+                 condition = command.Split('(', ')')[1].Trim();
+                //check for operator
+                if (condition.Contains("<=") && !condition.Contains(">"))
+                {
+                    conditionOperator = "<=";
+                    return true;
+                }
+                else if (condition.Contains(">=") && !condition.Contains("<"))
+                {
+                    conditionOperator = ">=";
+                    return true;
+                }
+                else if (condition.Contains("!="))
+                {
+                    conditionOperator = "!=";
+                    return true;
+                }
+                else if (condition.Contains("=") && !condition.Contains(">") && !condition.Contains("<"))
+                {
+                    conditionOperator = "=";
+                    return true;
+                }
+                else if (!condition.Contains("=") && condition.Contains(">") && !condition.Contains("<"))
+                {
+                    conditionOperator = ">";
+                    return true;
+
+                }
+                else if (!condition.Contains("=") && !condition.Contains(">") && condition.Contains("<"))
+                {
+                    conditionOperator = "<";
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string getOperator()
+        {
+            return conditionOperator;
+        }
+
+        /// <summary>
         /// Check for valid program commands
         /// </summary>
         /// <param name="command">program commands</param>
@@ -62,7 +202,7 @@ namespace Assessment1
             if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon"))
             {
                 string value_inside_brackets = null;
-                string[] parameters = null;
+                string[] parameters = null;               
                 if (command.Split('(', ')').Length > 1)
                 {
                     value_inside_brackets = command.Split('(', ')')[1];
