@@ -22,6 +22,8 @@ namespace Assessment1
 
         static string operators = "";
 
+        ArrayList method_parameter_variables = new ArrayList();
+
         public ComplexDrawing()
         {
 
@@ -214,7 +216,7 @@ namespace Assessment1
         {
             string[] command_parts = Draw.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             string method_name = command_parts[1].Trim();
-            string check_param = command_parts[2];
+            method_name = Regex.Replace(method_name, @"\s+", "");
             int parameter_count = 0;
             string parameter_inside_method = command_parts[2].Trim().Split('(', ')')[1];
             ArrayList commands_inside_method = new ArrayList();
@@ -232,12 +234,21 @@ namespace Assessment1
             if (parameter_inside_method.Contains(','))
             {
                 parameter_count = parameter_inside_method.Split(',').Length;
+                foreach (string variable_name in parameter_inside_method.Split(','))
+                {
+                    method_parameter_variables.Add(variable_name);
+                }
             }
             else
             {
-                parameter_count = parameter_inside_method.Length;
+                parameter_count = 1;
+                if (parameter_count > 0)
+                {
+                    method_parameter_variables.Add(parameter_inside_method);
+                }
             }
             string signature = method_name + "," + parameter_count;
+            MessageBox.Show(signature);
             if (!methods.ContainsKey(signature))
             {
                 methods.Add(signature, commands_inside_method);
@@ -259,12 +270,35 @@ namespace Assessment1
             if (parameter_inside_method.Contains(','))
             {
                 parameter_count = parameter_inside_method.Split(',').Length;
+                for (int i = 0; i < parameter_count; i++)
+                {
+                    if (!variable.ContainsKey((string)method_parameter_variables[i]))
+                    {
+                        variable.Add((string)method_parameter_variables[i], int.Parse(parameter_inside_method.Split(',')[i]));
+                    }
+                    else
+                    {
+                        variable[(string)method_parameter_variables[i]] = int.Parse(parameter_inside_method.Split(',')[i]);
+                    }
+                }
             }
             else
             {
-                parameter_count = parameter_inside_method.Length;
+                parameter_count = 1;
+                if (parameter_count > 0)
+                {
+                    if (!variable.ContainsKey((string)method_parameter_variables[0]))
+                    {
+                        variable.Add((string)method_parameter_variables[0], int.Parse(parameter_inside_method));
+                    }
+                    else
+                    {
+                        variable[(string)method_parameter_variables[0]] = int.Parse(parameter_inside_method);
+                    }
+                }
             }
-            string signature = methodname + "," + parameter_count;
+            string signature = methodname.Trim() + "," + parameter_count;
+
             ArrayList commands = new ArrayList();
             methods.TryGetValue(signature, out commands);
             foreach (string cmd in commands)

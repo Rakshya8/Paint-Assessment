@@ -87,7 +87,14 @@ namespace Assessment1
             }
             else if (cmd.Contains("method") && !cmd.Contains("endmethod"))
             {
-                type = "method";
+                if (cmd.Split(' ')[0].Equals("method"))
+                {
+                    type = "method";
+                }
+                else
+                {
+                    type = "methodcall";
+                }
             }
             else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon"))
             {
@@ -432,8 +439,8 @@ namespace Assessment1
             {
                 parameter_count = parameter_inside_method.Length;
             }
-            string signature = methodname + "," + parameter_count;
 
+            string signature = methodname + "," + parameter_count;
             //check for method signature;
             try
             {
