@@ -4,11 +4,25 @@
         <name>Assessment1</name>
     </assembly>
     <members>
+        <member name="M:Assessment1.BasicDrawing.#ctor">
+            <summary>
+            default constructor
+            </summary>
+        </member>
+        <member name="M:Assessment1.BasicDrawing.SetBasicDrawing(System.String,System.Drawing.Color,System.Boolean,System.Int32[])">
+            <summary>
+            sets properties of shapes
+            </summary>
+            <param name="Draw">contains shape command</param>
+            <param name="color">color of shape</param>
+            <param name="fillshape">fill shape</param>
+            <param name="list">contains x-axis, y-axis and shape size parameters</param>
+        </member>
         <member name="M:Assessment1.BasicDrawing.getShape">
             <summary>
-            
+            To return the shape commands stored in arraylist
             </summary>
-            <returns></returns>
+            <returns>list of valid shape commands</returns>
         </member>
         <member name="T:Assessment1.Check_Valid_Commands">
             <summary>
@@ -20,11 +34,10 @@
             Default Constructor
             </summary>
         </member>
-        <member name="M:Assessment1.Check_Valid_Commands.#ctor(Assessment1.Form1)">
+        <member name="M:Assessment1.Check_Valid_Commands.clear_error_list">
             <summary>
-            Constructor with form object as parameter
+            clear error list
             </summary>
-            <param name="frm">Object of Form1</param>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.Valid_execute_command(System.String)">
             <summary>
@@ -35,10 +48,10 @@
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.check_command_type(System.String)">
             <summary>
-            
+            check type of command
             </summary>
-            <param name="cmd"></param>
-            <returns></returns>
+            <param name="cmd">command to be checked</param>
+            <returns>type of command</returns>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.check_variable(System.String)">
             <summary>
@@ -47,17 +60,45 @@
             <param name="command">command to be checked</param>
             <returns></returns>
         </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_variable_operation(System.String)">
+            <summary>
+            check variable operations validity
+            </summary>
+            <param name="cmd">command to be checked</param>
+            <returns>true if variable exist else false</returns>
+        </member>
         <member name="M:Assessment1.Check_Valid_Commands.check_if_command(System.String)">
+            <summary>
+            Check validity of if command
+            </summary>
+            <param name="command">command to be checked</param>
+            <returns>true if command is valid else false</returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.getOperator">
+            <summary>
+            get if condition operator
+            </summary>
+            <returns>operator used in if command</returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_loop(System.String)">
+            <summary>
+            check loop command validity
+            </summary>
+            <param name="command">command to be checked</param>
+            <returns>true if command is valid else false</returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_method(System.String)">
+            <summary>
+            check validity of method command
+            </summary>
+            <param name="command">command to be checked</param>
+            <returns>true if command is valid else false</returns>
+        </member>
+        <member name="M:Assessment1.Check_Valid_Commands.check_methodcall(System.String)">
             <summary>
             
             </summary>
             <param name="command"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Assessment1.Check_Valid_Commands.getOperator">
-            <summary>
-            
-            </summary>
             <returns></returns>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.Check_command(System.String)">
@@ -72,6 +113,113 @@
             Stores list of errors found during command validation
             </summary>
             <returns>returns list of errors</returns>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.getMethodSignature">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.run_if_command(System.String,System.String[],System.Int32,Assessment1.Form1)">
+            <summary>
+            
+            </summary>
+            <param name="Draw"></param>
+            <param name="lines"></param>
+            <param name="line_found_in"></param>
+            <param name="fm"></param>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.run_loop_command(System.String,System.String[],System.Int32,Assessment1.Form1)">
+            <summary>
+            
+            </summary>
+            <param name="Draw"></param>
+            <param name="lines"></param>
+            <param name="loop_found_in_line"></param>
+            <param name="fm"></param>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.run_method_command(System.String,System.String[],System.Int32,Assessment1.Form1)">
+            <summary>
+            
+            </summary>
+            <param name="Draw"></param>
+            <param name="lines"></param>
+            <param name="loop_found_in_line"></param>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.getVariables">
+            
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.run_variable_command(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Draw"></param>
+        </member>
+        <member name="T:Assessment1.InvalidVariableNameException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.InvalidVariableNameException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Assessment1.InvalidCommandException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.InvalidCommandException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Assessment1.InvalidParameterException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.InvalidParameterException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Assessment1.VariableNotFoundException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.VariableNotFoundException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Assessment1.InvalidMethodNameException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.InvalidMethodNameException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Assessment1.MethodNotFoundException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.MethodNotFoundException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
         </member>
         <member name="T:Assessment1.Polygon">
             <summary>
@@ -190,6 +338,11 @@
             </summary>
             <param name="sender">contains a reference to the control/object that raised the event.</param>
             <param name="e">contains the event data</param>
+        </member>
+        <member name="M:Assessment1.Form1.draw_commands(System.String)">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:Assessment1.Form1.panel1_Paint(System.Object,System.Windows.Forms.PaintEventArgs)">
             <summary>
