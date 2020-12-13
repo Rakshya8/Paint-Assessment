@@ -30,7 +30,6 @@ namespace Assessment1
         //store errors
         ArrayList errors = new ArrayList();
 
-
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -42,9 +41,19 @@ namespace Assessment1
         /// <summary>
         /// clear error list
         /// </summary>
-        public void clear_error_list()
+        public void clear_list()
         {
             errors.Clear();
+            method_signature.Clear();
+            variable.Clear();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void clear_error()
+        {
+
         }
 
         /// <summary>
@@ -96,7 +105,7 @@ namespace Assessment1
                     type = "methodcall";
                 }
             }
-            else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon"))
+            else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon") || cmd.Contains("rotate"))
             {
                 type = "drawing_commands";
             }
@@ -348,6 +357,7 @@ namespace Assessment1
         /// check validity of method command
         /// </summary>
         /// <param name="command">command to be checked</param>
+        /// /// <param name="lines">command to be checked</param>
         /// <returns>true if command is valid else false</returns>
         public bool check_method(string command)
         {
@@ -358,7 +368,7 @@ namespace Assessment1
             {
                 if (command_parts[0].Equals("method"))
                 {
-                    if (command_parts.Length == 3) //method 1asdc ()
+                    if (command_parts.Length == 3)
                     {
                         if (Regex.IsMatch(command_parts[1], @"^[a-zA-Z0-9]+$"))
                         {
@@ -384,7 +394,6 @@ namespace Assessment1
                                                 throw new InvalidParameterException("Invalid parameters");
                                             }
                                         }
-
                                     }
                                     else
                                     {
@@ -485,7 +494,7 @@ namespace Assessment1
             string Draw_cmd = command.Split('(')[0].Trim();
             try
             {
-                if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon"))
+                if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon") || Draw_cmd.Equals("rotate"))
                 {
                     string value_inside_brackets = null;
                     string[] parameters = null;
@@ -621,6 +630,56 @@ namespace Assessment1
                         }
                     }
                     //end fill command
+
+                    //check rotate command
+                    if (Draw_cmd.Equals("rotate"))
+                    {
+                        try
+                        {
+                            if (parameters.Length == 1)
+                            {
+                                if (!Regex.IsMatch(parameters[0], @"^[0-9]+$"))
+                                {
+                                    if (variable.ContainsKey(parameters[0]))
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        throw new VariableNotFoundException("Variable: " + parameters[0] + " does not exist");
+                                    }
+                                }
+                                else
+                                {
+                                    int.Parse(parameters[0]);
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                throw new InvalidParameterException("Only 1 parameter required.");
+                            }
+
+                        }
+                        catch (FormatException)
+                        {
+                            errors.Add("Degree should be in numbers (0-9).");
+                            return false;
+                        }
+                        catch (InvalidParameterException e)
+                        {
+                            errors.Add(e.Message);
+                            return false;
+                        }
+                        catch (VariableNotFoundException e)
+                        {
+                            errors.Add(e.Message);
+                            return false;
+                        }
+
+                    }
+                    //end rotate command
+
 
                     //check circle command
                     if (Draw_cmd.Equals("circle"))

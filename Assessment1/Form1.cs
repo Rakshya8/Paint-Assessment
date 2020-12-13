@@ -51,6 +51,9 @@ namespace Assessment1
         //count line of commands
         int count_line = 0;
 
+        //rotate degree
+        static int rotate_degree = 0;
+
         //Generic collection to store variable name  and value
         IDictionary<string, int> variables = new Dictionary<string, int>();
 
@@ -97,9 +100,22 @@ namespace Assessment1
                     if (executing_command.Equals("clear"))
                     {
                         graphics.Clear(Color.White);
-                        shape_list.Clear();
                         drawline.Clear();
-                        textBox2.AppendText("All shapes, variable, method");
+                        shape_list.Clear();
+                        textBox2.Text = "All shapes are cleared.";
+                        if (ComplexDrawing.getMethodSignature().Count != 0 || ComplexDrawing.getVariables().Count != 0)
+                        {
+                            string message = "Do you want to variables and methods also?";
+                            string title = "Clear Data";
+                            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                            DialogResult result = MessageBox.Show(message, title, buttons);
+                            if (result == DialogResult.Yes)
+                            {
+                                check_cmd.clear_list();
+                                comp_draw.Clear_list();
+                                textBox2.Text = "All shapes, variable and methods are cleared.";
+                            }
+                        }
                     }
 
                     //if executing command is reset
@@ -109,7 +125,7 @@ namespace Assessment1
                         color = Color.Black;
                         initX = 0;
                         initY = 0;
-                        textBox2.AppendText("Moved to 0,0");
+                        textBox2.Text = "Pen color set to Black" + Environment.NewLine + "Fill turned off" + Environment.NewLine + "Moved to 0,0";
                     }
 
                     //if executing command is run
@@ -122,7 +138,7 @@ namespace Assessment1
                         int break_single_if_line = 0;
                         //
 
-                        check_cmd.clear_error_list();
+                        check_cmd.clear_error();
                         //clear console
                         textBox2.Text = null;
                         //get string from textbox separated by newline and store into array
@@ -176,6 +192,7 @@ namespace Assessment1
                                 {
                                     if (check_cmd.check_method(Draw))
                                     {
+
                                         if (error == 0)
                                         {
                                             complex_command = true;
@@ -192,8 +209,25 @@ namespace Assessment1
                                 //if (radius==10)
                                 if (command_type.Equals("if"))
                                 {
+                                    int if_end_tag_exist = 0;
+                                    foreach (string cmd in lines)
+                                    {
+                                        if (cmd.Equals("endif"))
+                                        {
+                                            if_end_tag_exist++;
+                                        }
+                                    }
+
+                                    if (if_end_tag_exist == 0)
+                                    {
+                                        textBox2.AppendText("Error: If statement not closed.");
+                                        return;
+                                    }
+
                                     if (check_cmd.check_if_command(Draw))
                                     {
+
+
                                         if (error == 0)
                                         {
                                             complex_command = true;
@@ -208,6 +242,21 @@ namespace Assessment1
                                 }
                                 if (command_type.Equals("loop"))
                                 {
+                                    int loop_end_tag_exist = 0;
+                                    foreach (string cmd in lines)
+                                    {
+                                        if (cmd.Equals("endloop"))
+                                        {
+                                            loop_end_tag_exist++;
+                                        }
+                                    }
+
+                                    if (loop_end_tag_exist == 0)
+                                    {
+                                        textBox2.AppendText("Error: Loop statement not closed.");
+                                        return;
+                                    }
+
                                     //check command validity
                                     if (check_cmd.check_loop(Draw))
                                     {
@@ -352,6 +401,20 @@ namespace Assessment1
                 panel1.Refresh();
             }
 
+            if (Drawing_command.Equals("rotate"))
+            {
+                string positions = Draw.Split('(', ')')[1];
+
+                if (!Regex.IsMatch(positions.Split(',')[0], @"^[0-9]+$"))
+                {
+                    variables.TryGetValue(positions.Split(',')[0], out rotate_degree);
+                }
+                else
+                {
+                    rotate_degree = int.Parse(positions.Split(',')[0]);
+                }
+            }
+
             if (Drawing_command.Equals("pen"))
             {
                 string pen_color_name = (Draw.Split('(', ')')[1]);
@@ -389,12 +452,23 @@ namespace Assessment1
                     fillshape = false;
                 }
             }
+
+
             if (Drawing_command.Equals("circle") || Drawing_command.Equals("triangle") || Drawing_command.Equals("rectangle") || Drawing_command.Equals("polygon"))
             {
                 bd.SetBasicDrawing(Draw, color, fillshape, initX, initY);
                 panel1.Refresh();
             }
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static int RotateShape()
+        {
+            return rotate_degree;
         }
 
         /// <summary>
@@ -516,5 +590,11 @@ namespace Assessment1
             e.Handled = true;
         }
 
+        private void ifLoopMethodCmdsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(" IF: If <variable>=10 \n Line 1 \n Line 2 Endif \n " +
+                "-----------------------\nLOOP: radius = 10 \n count = 1 \n loop for count <= 5 \n circle(radius) \n radius + 10  \n count + 1 \n endloop \n" +
+                "-----------------------\nMETHOD: Define a method with: \n Method myMethod(parameter list) \n Line 1 \n Etc \n Endmethod \n Call a method with: \n myMethod(< parameter list >) ");
+        }
     }
 }

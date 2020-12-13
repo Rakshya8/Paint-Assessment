@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Collections;
+using System.Drawing.Drawing2D;
 
 namespace Assessment1
 {
@@ -44,7 +45,7 @@ namespace Assessment1
         {
             //list[0] is x, list[1] is y, list[2] is radius
             base.Set(colour, fill, list[0], list[1]);
-            this.points_list = list;            
+            this.points_list = list;
         }
 
         /// <summary>
@@ -52,7 +53,12 @@ namespace Assessment1
         /// </summary>
         /// <param name="g">GDi+ Drawing surface</param>
         public override void Draw(Graphics g)
-        {          
+        {
+            if (Form1.RotateShape() != 0)
+            {
+                float rotateValue = (float)Form1.RotateShape();
+                g.RotateTransform((rotateValue), MatrixOrder.Append);
+            }
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
             Point[] points = new Point[points_list.Length];

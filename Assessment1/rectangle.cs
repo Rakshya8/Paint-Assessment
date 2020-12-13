@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Assessment1
 {
@@ -47,7 +48,7 @@ namespace Assessment1
         /// <param name="list">stores number of arguments</param>
         public override void Set(Color color, bool fill, params int[] list)
         {
-       
+
             base.Set(color, fill, list[0], list[1]);
             this.length = list[2];
             this.width = list[3];
@@ -60,7 +61,11 @@ namespace Assessment1
         /// <param name="g">GDi+ Drawing surface</param>
         public override void Draw(Graphics g)
         {
-
+            if (Form1.RotateShape() != 0)
+            {
+                float rotateValue = (float)Form1.RotateShape();
+                g.RotateTransform((rotateValue), MatrixOrder.Append);
+            }
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
             if (fill)

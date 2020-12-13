@@ -41,12 +41,37 @@ namespace Assessment1
         /// <summary>
         /// 
         /// </summary>
+        public void Clear_list()
+        {
+            methods.Clear();
+            variable.Clear();
+            method_parameter_variables.Clear();
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="Draw"></param>
         /// <param name="lines"></param>
         /// <param name="line_found_in"></param>
         /// <param name="fm"></param>
         public void run_if_command(string Draw, string[] lines, int line_found_in, Form1 fm)
         {
+            int if_end_tag_exist = 0;
+            for (int a = line_found_in; a < lines.Length; a++)
+            {
+                if (lines[a].Equals("endmethod"))
+                {
+                    if_end_tag_exist++;
+                }
+            }
+            if (if_end_tag_exist == 0)
+            {
+                fm.textBox2.AppendText("Error: If statement not closed.");
+                return;
+            }
+
             operators = Check_Valid_Commands.getOperator();
             string condition = Draw.Split('(', ')')[1].Trim();
             string[] splitCondition = condition.Split(new string[] {
@@ -59,92 +84,96 @@ namespace Assessment1
                 {
                     string conditionKey = splitCondition[0].Trim();
                     int conditionValue = int.Parse(splitCondition[1].Trim());
-                    foreach (KeyValuePair<string, int> kvp in variable)
+                    if (variable.ContainsKey(conditionKey))
                     {
-                        if (conditionKey == kvp.Key)
+                        int variableValue = 0;
+                        variable.TryGetValue(conditionKey, out variableValue);
+
+                        bool conditionStatus = false;
+
+                        int value1 = variableValue; //variable
+                        int value2 = conditionValue; // 10 20 30
+
+                        if (operators == "<=")
                         {
-                            int variableValue = kvp.Value;
+                            if (value1 <= value2) conditionStatus = true;
+                        }
+                        else if (operators == ">=")
+                        {
+                            if (value1 >= value2) conditionStatus = true;
+                        }
+                        else if (operators == "==")
+                        {
+                            if (value1 == value2) conditionStatus = true;
+                        }
+                        else if (operators == ">")
+                        {
+                            if (value1 > value2) conditionStatus = true;
+                        }
+                        else if (operators == "<")
+                        {
+                            if (value1 < value2) conditionStatus = true;
+                        }
+                        else if (operators == "!=")
+                        {
+                            if (value1 != value2) conditionStatus = true;
+                        }
 
-                            bool conditionStatus = false;
-
-                            int value1 = variableValue; //variable
-                            int value2 = conditionValue; // 10 20 30
-
-                            if (operators == "<=")
+                        if (conditionStatus)
+                        {
+                            if (lines[line_found_in].Equals("then"))
                             {
-                                if (value1 <= value2) conditionStatus = true;
-                            }
-                            else if (operators == ">=")
-                            {
-                                if (value1 >= value2) conditionStatus = true;
-                            }
-                            else if (operators == "==")
-                            {
-                                if (value1 == value2) conditionStatus = true;
-                            }
-                            else if (operators == ">")
-                            {
-                                if (value1 > value2) conditionStatus = true;
-                            }
-                            else if (operators == "<")
-                            {
-                                if (value1 < value2) conditionStatus = true;
-                            }
-                            else if (operators == "!=")
-                            {
-                                if (value1 != value2) conditionStatus = true;
-                            }
-
-                            if (conditionStatus)
-                            {
-                                if (lines[line_found_in].Equals("then"))
+                                string command_type = check_cmd.check_command_type(lines[line_found_in + 1]);
+                                if (command_type.Equals("drawing_commands"))
                                 {
-                                    string command_type = check_cmd.check_command_type(lines[line_found_in + 1]);
-                                    if (command_type.Equals("drawing_commands"))
+                                    if (check_cmd.Check_command(lines[line_found_in + 1]))
                                     {
-                                        if (check_cmd.Check_command(lines[line_found_in + 1]))
-                                        {
-                                            fm.draw_commands(lines[line_found_in + 1]);
-                                        }
+                                        fm.draw_commands(lines[line_found_in + 1]);
                                     }
                                 }
-                                else
+                            }
+                            else
+                            {
+                                for (int i = (line_found_in); i < lines.Length; i++)
                                 {
-                                    for (int i = (line_found_in); i < lines.Length; i++)
+                                    if (!(lines[i].Equals("endif")))
                                     {
-                                        if (!(lines[i].Equals("endif")))
+                                        string command_type = check_cmd.check_command_type(lines[i]);
+                                        if (command_type.Equals("drawing_commands"))
                                         {
-                                            string command_type = check_cmd.check_command_type(lines[i]);
-                                            if (command_type.Equals("drawing_commands"))
+                                            if (check_cmd.Check_command(lines[i]))
                                             {
-                                                if (check_cmd.Check_command(lines[i]))
-                                                {
-                                                    fm.draw_commands(lines[i]);
-                                                }
+                                                fm.draw_commands(lines[i]);
                                             }
-                                            else if (command_type.Equals("variableoperation"))
+                                        }
+                                        else if (command_type.Equals("variableoperation"))
+                                        {
+                                            if (check_cmd.check_variable_operation(lines[i]))
                                             {
-                                                if (check_cmd.check_variable_operation(lines[i]))
-                                                {
-                                                    runVariableOperation(lines[i], fm);
-                                                }
+                                                runVariableOperation(lines[i], fm);
                                             }
                                         }
                                         else
                                         {
-                                            break;
+                                            fm.textBox2.AppendText("\n Command: (" + lines[i] + ") not supported.");
+                                            return;
                                         }
-
                                     }
-                                }
+                                    else
+                                    {
+                                        break;
+                                    }
 
+                                }
                             }
-                        }
-                        else
-                        {
-                            throw new VariableNotFoundException("Variable: " + conditionKey + " does not exist");
+
                         }
                     }
+                    else
+                    {
+                        throw new VariableNotFoundException("Variable: " + conditionKey + " does not exist");
+                    }
+
                 }
                 else
                 {
@@ -170,6 +199,20 @@ namespace Assessment1
         /// <param name="fm"></param>
         public void run_loop_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
         {
+            int loop_end_tag_exist = 0;
+            for (int a = loop_found_in_line; a < lines.Length; a++)
+            {
+                if (lines[a].Equals("endloop"))
+                {
+                    loop_end_tag_exist++;
+                }
+            }
+            if (loop_end_tag_exist == 0)
+            {
+                fm.textBox2.AppendText("Error: Loop not closed.");
+                return;
+            }
+
             string[] store_command = Draw.Split(new string[] { "for" }, StringSplitOptions.RemoveEmptyEntries);
             int loop_val = 0;
             string[] loop_condition = store_command[1].Split(new string[] { "<=", ">=", "<", ">" }, StringSplitOptions.RemoveEmptyEntries);
@@ -219,6 +262,11 @@ namespace Assessment1
                                     runVariableOperation(cmd, fm);
                                 }
                             }
+                            else
+                            {
+                                fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
+                                return;
+                            }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
                     }
@@ -251,6 +299,11 @@ namespace Assessment1
                                     runVariableOperation(cmd, fm);
                                 }
                             }
+                            else
+                            {
+                                fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
+                                return;
+                            }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
                     }
@@ -281,6 +334,11 @@ namespace Assessment1
                                 {
                                     runVariableOperation(cmd, fm);
                                 }
+                            }
+                            else
+                            {
+                                fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
+                                return;
                             }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
@@ -313,6 +371,11 @@ namespace Assessment1
                                     runVariableOperation(cmd, fm);
                                 }
                             }
+                            else
+                            {
+                                fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
+                                return;
+                            }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
                     }
@@ -326,10 +389,24 @@ namespace Assessment1
         /// </summary>
         /// <param name="Draw"></param>
         /// <param name="lines"></param>
-        /// <param name="loop_found_in_line"></param>
+        /// <param name="method_found_in_line"></param>
         /// <param name="fm"></param>
-        public void run_method_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
+        public void run_method_command(string Draw, string[] lines, int method_found_in_line, Form1 fm)
         {
+            int method_end_tag_exist = 0;
+            for (int a = method_found_in_line; a < lines.Length; a++)
+            {
+                if (lines[a].Equals("endmethod"))
+                {
+                    method_end_tag_exist++;
+                }
+            }
+            if (method_end_tag_exist == 0)
+            {
+                fm.textBox2.AppendText("Error: Method not closed.");
+                return;
+            }
+
             //method             
             string[] command_parts = Draw.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             string method_name = command_parts[1].Trim();
@@ -337,7 +414,7 @@ namespace Assessment1
             int parameter_count = 0;
             string parameter_inside_method = command_parts[2].Trim().Split('(', ')')[1];
             ArrayList commands_inside_method = new ArrayList();
-            for (int i = loop_found_in_line; i < lines.Length; i++)
+            for (int i = method_found_in_line; i < lines.Length; i++)
             {
                 if (!lines.Equals("endmethod"))
                 {
@@ -379,7 +456,7 @@ namespace Assessment1
 
 
 
-        public void run_method_call(String Draw, Form1 fm)
+        public void run_method_call(string Draw, Form1 fm)
         {
             string methodname = Draw.Split('(')[0];
             methodname = Regex.Replace(methodname, @"\s+", "");
@@ -436,6 +513,11 @@ namespace Assessment1
                     {
                         runVariableOperation(cmd, fm);
                     }
+                }
+                else
+                {
+                    fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
+                    return;
                 }
             }
 

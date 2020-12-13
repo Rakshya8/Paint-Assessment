@@ -46,6 +46,7 @@
             this.commandListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shapeListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ifLoopMethodCmdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,7 +96,7 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(51, 286);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(630, 358);
+            this.panel1.Size = new System.Drawing.Size(630, 431);
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -119,7 +120,7 @@
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(350, 358);
+            this.textBox2.Size = new System.Drawing.Size(350, 431);
             this.textBox2.TabIndex = 10;
             this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
             // 
@@ -166,7 +167,8 @@
             this.actionListToolStripMenuItem,
             this.commandListToolStripMenuItem,
             this.colorListToolStripMenuItem,
-            this.shapeListToolStripMenuItem});
+            this.shapeListToolStripMenuItem,
+            this.ifLoopMethodCmdsToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "Help";
@@ -198,6 +200,13 @@
             this.shapeListToolStripMenuItem.Size = new System.Drawing.Size(187, 26);
             this.shapeListToolStripMenuItem.Text = "Shape List";
             this.shapeListToolStripMenuItem.Click += new System.EventHandler(this.shapeListToolStripMenuItem_Click);
+            // 
+            // ifLoopMethodCmdsToolStripMenuItem
+            // 
+            this.ifLoopMethodCmdsToolStripMenuItem.Name = "ifLoopMethodCmdsToolStripMenuItem";
+            this.ifLoopMethodCmdsToolStripMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.ifLoopMethodCmdsToolStripMenuItem.Text = "If / Loop / Method Cmds";
+            this.ifLoopMethodCmdsToolStripMenuItem.Click += new System.EventHandler(this.ifLoopMethodCmdsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -248,6 +257,7 @@
         private System.Windows.Forms.ToolStripMenuItem colorListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shapeListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem actionListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ifLoopMethodCmdsToolStripMenuItem;
     }
 }
 

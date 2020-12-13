@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Assessment1
 {
@@ -32,7 +33,7 @@ namespace Assessment1
         /// <param name="a">Side1 of Traingle</param>
         /// <param name="b">Side2 of Traingle</param>
         /// <param name="c">Side3 of Traingle</param>
-        public Triangle(Color color,bool fillshape, int x, int y, int a, int b, int c) : base(color, fillshape, x, y)
+        public Triangle(Color color, bool fillshape, int x, int y, int a, int b, int c) : base(color, fillshape, x, y)
         {
 
             this.side1 = a;
@@ -46,10 +47,10 @@ namespace Assessment1
         /// <param name="colour">Color of pen</param>
         /// <param name="fill">Inner fill shapes</param>
         /// <param name="list">stores number of arguments</param>
-        public override void Set(Color colour,bool fill, params int[] list)
+        public override void Set(Color colour, bool fill, params int[] list)
         {
             //list[0] is x, list[1] is y, list[2] is radius
-            base.Set(colour,fill, list[0], list[1]);
+            base.Set(colour, fill, list[0], list[1]);
             this.side1 = list[2];
             this.side2 = list[3];
             this.side3 = list[4];
@@ -62,6 +63,11 @@ namespace Assessment1
         /// <param name="g">GDi+ Drawing surface</param>
         public override void Draw(Graphics g)
         {
+            if (Form1.RotateShape() != 0)
+            {
+                float rotateValue = (float)Form1.RotateShape();
+                g.RotateTransform((rotateValue), MatrixOrder.Append);
+            }
 
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);

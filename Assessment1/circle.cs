@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Assessment1
 {
     /// <summary>
     /// Class Circle inherits base class Shape
     /// </summary>
-    class Circle :Shape
+    class Circle : Shape
     {
         int radius;
 
@@ -53,7 +54,11 @@ namespace Assessment1
         /// <param name="g">GDi+ Drawing surface</param>
         public override void Draw(Graphics g)
         {
-
+            if (Form1.RotateShape() != 0)
+            {
+                float rotateValue = (float)Form1.RotateShape();
+                g.RotateTransform((rotateValue));
+            }
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
             if (fill)
@@ -64,7 +69,7 @@ namespace Assessment1
             {
                 g.DrawEllipse(p, x, y, radius, radius);
             }
-            
+
 
         }
     }
