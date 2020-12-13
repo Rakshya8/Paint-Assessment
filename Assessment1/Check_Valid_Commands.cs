@@ -296,7 +296,9 @@ namespace Assessment1
             string[] check_cmd = command.Split(new string[] {
         "for"
       },
+
             StringSplitOptions.RemoveEmptyEntries);
+            string[] loopCondition = { };
             try
             {
                 if (!check_cmd[0].Equals("loop"))
@@ -309,9 +311,15 @@ namespace Assessment1
                     throw new InvalidCommandException("Invalid Loop Command Syntax");
                 }
 
+                loopCondition = check_cmd[1].Split(new string[] { "<=", ">=", "<", ">" }, StringSplitOptions.RemoveEmptyEntries);
+                if (loopCondition.Length == 1)
+                {
+                    throw new InvalidParameterException("Invalid loop statement. Operator should be <= or => or < or >");
+                }
+
                 if (!Regex.IsMatch(check_cmd[1], @"^[0-9]+$"))
                 {
-                    string variable_name = check_cmd[1];
+                    string variable_name = loopCondition[0].ToLower().Trim();
                     if (!variable.ContainsKey(variable_name))
                     {
                         throw new VariableNotFoundException("Variable: " + variable_name + " not found.");
@@ -324,6 +332,11 @@ namespace Assessment1
                 return false;
             }
             catch (VariableNotFoundException e)
+            {
+                errors.Add(e.Message);
+                return false;
+            }
+            catch (InvalidParameterException e)
             {
                 errors.Add(e.Message);
                 return false;
@@ -345,7 +358,7 @@ namespace Assessment1
             {
                 if (command_parts[0].Equals("method"))
                 {
-                    if (command_parts.Length == 3)
+                    if (command_parts.Length == 3) //method 1asdc ()
                     {
                         if (Regex.IsMatch(command_parts[1], @"^[a-zA-Z0-9]+$"))
                         {

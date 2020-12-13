@@ -67,8 +67,8 @@ namespace Assessment1
 
                             bool conditionStatus = false;
 
-                            int value1 = variableValue;
-                            int value2 = conditionValue;
+                            int value1 = variableValue; //variable
+                            int value2 = conditionValue; // 10 20 30
 
                             if (operators == "<=")
                             {
@@ -122,11 +122,11 @@ namespace Assessment1
                                                     fm.draw_commands(lines[i]);
                                                 }
                                             }
-                                            else if (command_type.Equals("variable operation"))
+                                            else if (command_type.Equals("variableoperation"))
                                             {
                                                 if (check_cmd.check_variable_operation(lines[i]))
                                                 {
-                                                    runVariableOperation(lines[i]);
+                                                    runVariableOperation(lines[i], fm);
                                                 }
                                             }
                                         }
@@ -171,35 +171,150 @@ namespace Assessment1
         public void run_loop_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
         {
             string[] store_command = Draw.Split(new string[] { "for" }, StringSplitOptions.RemoveEmptyEntries);
-            string variable_name = store_command[1].Trim();
-            int loop_count = 0;
+            int loop_val = 0;
+            string[] loop_condition = store_command[1].Split(new string[] { "<=", ">=", "<", ">" }, StringSplitOptions.RemoveEmptyEntries);
+            string variable_name = loop_condition[0].ToLower().Trim();
+            int loopValue = int.Parse(loop_condition[1].Trim());
+            ArrayList cmds = new ArrayList();
             if (variable.ContainsKey(variable_name))
             {
-                variable.TryGetValue(variable_name, out loop_count);
-                for (int loop = 0; loop < loop_count; loop++)
+                variable.TryGetValue(variable_name, out loop_val);
+
+                for (int i = (loop_found_in_line); i < lines.Length; i++)
                 {
-                    for (int i = (loop_found_in_line); i < lines.Length; i++)
+                    if (!(lines[i].Equals("endloop")))
                     {
-                        if (!(lines[i].Equals("endloop")))
+                        cmds.Add(lines[i]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (store_command[1].Contains("<="))
+                {
+                    if (loop_val >= loopValue)
+                    {
+                        fm.textBox2.AppendText("Variable " + variable_name + " should be smaller than " + loopValue);
+                        return;
+                    }
+                    while (loop_val <= loopValue)
+                    {
+                        foreach (string cmd in cmds)
                         {
-                            string command_type = check_cmd.check_command_type(lines[i]);
+                            string command_type = check_cmd.check_command_type(cmd);
+
                             if (command_type.Equals("drawing_commands"))
                             {
-                                if (check_cmd.Check_command(lines[i]))
+                                if (check_cmd.Check_command(cmd))
                                 {
-                                    fm.draw_commands(lines[i]);
+                                    fm.draw_commands(cmd);
                                 }
                             }
-                            if (command_type.Equals("variableoperation"))
+                            else if (command_type.Equals("variableoperation"))
                             {
-                                runVariableOperation(lines[i]);
+                                if (check_cmd.check_variable_operation(cmd))
+                                {
+                                    runVariableOperation(cmd, fm);
+                                }
                             }
                         }
-                        else
-                        {
-                            break;
-                        }
+                        variable.TryGetValue(variable_name, out loop_val);
+                    }
+                }
+                else if (store_command[1].Contains(">="))
+                {
+                    if (loop_val <= loopValue)
+                    {
+                        fm.textBox2.AppendText("Variable " + variable_name + " should be greater than " + loopValue);
+                        return;
+                    }
+                    while (loop_val >= loopValue)
+                    {
 
+                        foreach (string cmd in cmds)
+                        {
+                            string command_type = check_cmd.check_command_type(cmd);
+
+                            if (command_type.Equals("drawing_commands"))
+                            {
+                                if (check_cmd.Check_command(cmd))
+                                {
+                                    fm.draw_commands(cmd);
+                                }
+                            }
+                            else if (command_type.Equals("variableoperation"))
+                            {
+                                if (check_cmd.check_variable_operation(cmd))
+                                {
+                                    runVariableOperation(cmd, fm);
+                                }
+                            }
+                        }
+                        variable.TryGetValue(variable_name, out loop_val);
+                    }
+                }
+                else if (store_command[1].Contains(">"))
+                {
+                    if (loop_val < loopValue)
+                    {
+                        fm.textBox2.AppendText("Variable " + variable_name + " should be greater than " + loopValue);
+                        return;
+                    }
+                    while (loop_val > loopValue)
+                    {
+                        foreach (string cmd in cmds)
+                        {
+                            string command_type = check_cmd.check_command_type(cmd);
+
+                            if (command_type.Equals("drawing_commands"))
+                            {
+                                if (check_cmd.Check_command(cmd))
+                                {
+                                    fm.draw_commands(cmd);
+                                }
+                            }
+                            else if (command_type.Equals("variableoperation"))
+                            {
+                                if (check_cmd.check_variable_operation(cmd))
+                                {
+                                    runVariableOperation(cmd, fm);
+                                }
+                            }
+                        }
+                        variable.TryGetValue(variable_name, out loop_val);
+                    }
+                }
+                else if (store_command[1].Contains("<"))
+                {
+                    if (loop_val > loopValue)
+                    {
+                        fm.textBox2.AppendText("Variable " + variable_name + " should be smaller than " + loopValue);
+                        return;
+                    }
+                    while (loop_val < loopValue)
+                    {
+                        foreach (string cmd in cmds)
+                        {
+                            string command_type = check_cmd.check_command_type(cmd);
+
+                            if (command_type.Equals("drawing_commands"))
+                            {
+                                if (check_cmd.Check_command(cmd))
+                                {
+                                    fm.draw_commands(cmd);
+                                }
+                            }
+                            else if (command_type.Equals("variableoperation"))
+                            {
+                                if (check_cmd.check_variable_operation(cmd))
+                                {
+                                    runVariableOperation(cmd, fm);
+                                }
+                            }
+                        }
+                        variable.TryGetValue(variable_name, out loop_val);
                     }
                 }
             }
@@ -212,8 +327,10 @@ namespace Assessment1
         /// <param name="Draw"></param>
         /// <param name="lines"></param>
         /// <param name="loop_found_in_line"></param>
+        /// <param name="fm"></param>
         public void run_method_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
         {
+            //method             
             string[] command_parts = Draw.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             string method_name = command_parts[1].Trim();
             method_name = Regex.Replace(method_name, @"\s+", "");
@@ -248,7 +365,6 @@ namespace Assessment1
                 }
             }
             string signature = method_name + "," + parameter_count;
-            MessageBox.Show(signature);
             if (!methods.ContainsKey(signature))
             {
                 methods.Add(signature, commands_inside_method);
@@ -260,6 +376,8 @@ namespace Assessment1
 
 
         }
+
+
 
         public void run_method_call(String Draw, Form1 fm)
         {
@@ -300,6 +418,7 @@ namespace Assessment1
             string signature = methodname.Trim() + "," + parameter_count;
 
             ArrayList commands = new ArrayList();
+
             methods.TryGetValue(signature, out commands);
             foreach (string cmd in commands)
             {
@@ -315,7 +434,7 @@ namespace Assessment1
                 {
                     if (check_cmd.check_variable_operation(cmd))
                     {
-                        runVariableOperation(cmd);
+                        runVariableOperation(cmd, fm);
                     }
                 }
             }
@@ -348,7 +467,7 @@ namespace Assessment1
         }
 
 
-        public bool runVariableOperation(string line)
+        public bool runVariableOperation(string line, Form1 fm)
         {
 
             try
@@ -377,41 +496,36 @@ namespace Assessment1
                 string vrValue = variables[1].Trim();
                 int vrValuenum = Int32.Parse(vrValue);
                 int dictValue = 0;
-                foreach (KeyValuePair<string, int> kvp in variable)
+
+                if (variable.ContainsKey(vrKey))
                 {
-                    if (vrKey == kvp.Key)
+                    variable.TryGetValue(vrKey, out dictValue);
+                    if (line.Contains("+"))
                     {
-                        dictValue = kvp.Value;
-                        if (line.Contains("+"))
-                        {
-                            variable[kvp.Key] = dictValue + vrValuenum;
-                        }
-                        else if (line.Contains("-"))
-                        {
-                            variable[kvp.Key] = dictValue - vrValuenum;
-                        }
-                        else if (line.Contains("*"))
-                        {
-                            variable[kvp.Key] = dictValue * vrValuenum;
-                        }
-                        else if (line.Contains("/"))
-                        {
-                            variable[kvp.Key] = dictValue / vrValuenum;
-                        }
+                        variable[vrKey] = dictValue + vrValuenum;
                     }
-                    else
+                    else if (line.Contains("-"))
                     {
-                        //variable not found
-                        return false;
+                        variable[vrKey] = dictValue - vrValuenum;
                     }
-
+                    else if (line.Contains("*"))
+                    {
+                        variable[vrKey] = dictValue * vrValuenum;
+                    }
+                    else if (line.Contains("/"))
+                    {
+                        variable[vrKey] = dictValue / vrValuenum;
+                    }
                 }
-
+                else
+                {
+                    throw new VariableNotFoundException("Variable: " + vrKey + "doesnot exist");
+                }
                 return true;
             }
-            catch (Exception e)
+            catch (VariableNotFoundException e)
             {
-                //invalid variable operation
+                fm.textBox2.AppendText(e.Message);
                 return false;
             }
         }

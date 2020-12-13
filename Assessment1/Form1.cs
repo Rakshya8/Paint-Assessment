@@ -147,6 +147,7 @@ namespace Assessment1
                             {
                                 break_single_if_line = count_line + 1;
                             }
+
                             //if commands 'if/loop/method' are inactive
                             if (!complex_command && !command_type.Equals("end_tag"))
                             {
@@ -188,6 +189,7 @@ namespace Assessment1
                                     }
 
                                 }
+                                //if (radius==10)
                                 if (command_type.Equals("if"))
                                 {
                                     if (check_cmd.check_if_command(Draw))
@@ -243,7 +245,7 @@ namespace Assessment1
                                     {
                                         if (error == 0)
                                         {
-                                            comp_draw.runVariableOperation(Draw);
+                                            comp_draw.runVariableOperation(Draw, this);
                                         }
                                     }
                                     else

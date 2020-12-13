@@ -47,6 +47,8 @@ namespace Assessment1
 
             string Drawing_command = Draw.Split('(')[0];
 
+
+            //circle (abc)
             //start circle command 
             if (Drawing_command.Equals("circle"))
             {

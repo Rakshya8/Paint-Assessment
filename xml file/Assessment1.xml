@@ -145,6 +145,7 @@
             <param name="Draw"></param>
             <param name="lines"></param>
             <param name="loop_found_in_line"></param>
+            <param name="fm"></param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.getVariables">
             
@@ -416,6 +417,11 @@
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Assessment1.Form1.textBox2">
+            <summary>
+            textbox2 shows all error found
             </summary>
         </member>
         <member name="M:Assessment1.Program.Main">
