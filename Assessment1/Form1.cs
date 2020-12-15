@@ -36,15 +36,6 @@ namespace Assessment1
         //store list of objects.
         ArrayList shape_list = new ArrayList();
 
-        //check if 'if' command is active or not
-        bool if_command_active = false;
-
-        //check if 'loop' command is active or not
-        bool loop_command_active = false;
-
-        //check if 'method' command is active or not
-        bool method_command_active = false;
-
         //checks if fill is on/off
         private bool fillshape = false;
 
@@ -156,7 +147,21 @@ namespace Assessment1
 
                             if (command_type.Equals("end_tag"))
                             {
-                                complex_command = false;
+                                if (!complex_command)
+                                {
+                                    textBox2.AppendText("Error: Command " + Draw + " found. Command initiation doesnot exist.");
+                                }
+                                else
+                                {
+                                    complex_command = false;
+                                }
+
+                            }
+
+                            if (command_type.Equals("invalid"))
+                            {
+                                textBox2.AppendText("Invalid Command ( " + Draw + " ) on line " + count_line);
+                                continue;
                             }
 
                             if (command_type.Equals("singleif"))
@@ -209,25 +214,8 @@ namespace Assessment1
                                 //if (radius==10)
                                 if (command_type.Equals("if"))
                                 {
-                                    int if_end_tag_exist = 0;
-                                    foreach (string cmd in lines)
-                                    {
-                                        if (cmd.Equals("endif"))
-                                        {
-                                            if_end_tag_exist++;
-                                        }
-                                    }
-
-                                    if (if_end_tag_exist == 0)
-                                    {
-                                        textBox2.AppendText("Error: If statement not closed.");
-                                        return;
-                                    }
-
                                     if (check_cmd.check_if_command(Draw))
                                     {
-
-
                                         if (error == 0)
                                         {
                                             complex_command = true;
@@ -242,21 +230,6 @@ namespace Assessment1
                                 }
                                 if (command_type.Equals("loop"))
                                 {
-                                    int loop_end_tag_exist = 0;
-                                    foreach (string cmd in lines)
-                                    {
-                                        if (cmd.Equals("endloop"))
-                                        {
-                                            loop_end_tag_exist++;
-                                        }
-                                    }
-
-                                    if (loop_end_tag_exist == 0)
-                                    {
-                                        textBox2.AppendText("Error: Loop statement not closed.");
-                                        return;
-                                    }
-
                                     //check command validity
                                     if (check_cmd.check_loop(Draw))
                                     {

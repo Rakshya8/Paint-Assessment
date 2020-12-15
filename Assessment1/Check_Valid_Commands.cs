@@ -53,7 +53,7 @@ namespace Assessment1
         /// </summary>
         public void clear_error()
         {
-
+            errors.Clear();
         }
 
         /// <summary>
@@ -356,16 +356,23 @@ namespace Assessment1
         /// <summary>
         /// check validity of method command
         /// </summary>
-        /// <param name="command">command to be checked</param>
-        /// /// <param name="lines">command to be checked</param>
+        /// <param name="command">command to be checked</param>        
         /// <returns>true if command is valid else false</returns>
         public bool check_method(string command)
         {
-
-            string[] command_parts = command.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            string parameter_inside_method = "";
             try
             {
+                if (!(command.Contains("(") && command.Contains(")")))
+                {
+                    throw new InvalidCommandException("Invalid Command Syntax");
+                }
+                string[] command_part = command.Split(new string[] { "(" }, StringSplitOptions.RemoveEmptyEntries);
+                string inside_brackets = command_part[1];
+                inside_brackets = Regex.Replace(inside_brackets, @"\s+", "");
+                string cmd = command_part[0] + "(" + inside_brackets;
+                string[] command_parts = cmd.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                string parameter_inside_method = "";
+
                 if (command_parts[0].Equals("method"))
                 {
                     if (command_parts.Length == 3)
@@ -377,6 +384,7 @@ namespace Assessment1
                             if (Regex.IsMatch(first_char, @"^[a-zA-Z]+$"))
                             {
                                 string check_param = command_parts[2];
+                                check_param = Regex.Replace(check_param, @"\s+", "");
                                 if (!check_param[0].Equals('(') || !check_param[check_param.Length - 1].Equals(')'))
                                 {
                                     throw new InvalidMethodNameException("Invalid Method Command Syntax");
@@ -459,7 +467,14 @@ namespace Assessment1
             }
             else
             {
-                parameter_count = parameter_inside_method.Length;
+                if (parameter_inside_method.Length > 0)
+                {
+                    parameter_count = 1;
+                }
+                else
+                {
+                    parameter_count = 0;
+                }
             }
 
             string signature = methodname + "," + parameter_count;

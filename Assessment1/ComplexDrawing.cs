@@ -9,12 +9,13 @@ using System.Collections;
 
 namespace Assessment1
 {
-    class ComplexDrawing
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ComplexDrawing
     {
 
         Check_Valid_Commands check_cmd = new Check_Valid_Commands();
-
-        //IDictionary<ArrayList, int> loops = new Dictionary<ArrayList, int>();
 
         static IDictionary<string, ArrayList> methods = new Dictionary<string, ArrayList>();
 
@@ -24,6 +25,9 @@ namespace Assessment1
 
         ArrayList method_parameter_variables = new ArrayList();
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ComplexDrawing()
         {
 
@@ -56,20 +60,20 @@ namespace Assessment1
         /// <param name="lines"></param>
         /// <param name="line_found_in"></param>
         /// <param name="fm"></param>
-        public void run_if_command(string Draw, string[] lines, int line_found_in, Form1 fm)
+        public bool run_if_command(string Draw, string[] lines, int line_found_in, Form1 fm)
         {
             int if_end_tag_exist = 0;
             for (int a = line_found_in; a < lines.Length; a++)
             {
-                if (lines[a].Equals("endmethod"))
+                if (lines[a].Equals("endif"))
                 {
                     if_end_tag_exist++;
                 }
             }
-            if (if_end_tag_exist == 0)
+            if (if_end_tag_exist == 0 && !lines[line_found_in].Equals("then"))
             {
                 fm.textBox2.AppendText("Error: If statement not closed.");
-                return;
+                return false;
             }
 
             operators = Check_Valid_Commands.getOperator();
@@ -156,7 +160,7 @@ namespace Assessment1
                                         else
                                         {
                                             fm.textBox2.AppendText("\n Command: (" + lines[i] + ") not supported.");
-                                            return;
+                                            return false;
                                         }
                                     }
                                     else
@@ -183,11 +187,14 @@ namespace Assessment1
             catch (InvalidParameterException e)
             {
                 fm.textBox2.AppendText(e.Message);
+                return false;
             }
             catch (VariableNotFoundException e)
             {
                 fm.textBox2.AppendText(e.Message);
+                return false;
             }
+            return true;
         }
 
         /// <summary>
@@ -197,7 +204,7 @@ namespace Assessment1
         /// <param name="lines"></param>
         /// <param name="loop_found_in_line"></param>
         /// <param name="fm"></param>
-        public void run_loop_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
+        public bool run_loop_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
         {
             int loop_end_tag_exist = 0;
             for (int a = loop_found_in_line; a < lines.Length; a++)
@@ -210,7 +217,7 @@ namespace Assessment1
             if (loop_end_tag_exist == 0)
             {
                 fm.textBox2.AppendText("Error: Loop not closed.");
-                return;
+                return false;
             }
 
             string[] store_command = Draw.Split(new string[] { "for" }, StringSplitOptions.RemoveEmptyEntries);
@@ -240,7 +247,7 @@ namespace Assessment1
                     if (loop_val >= loopValue)
                     {
                         fm.textBox2.AppendText("Variable " + variable_name + " should be smaller than " + loopValue);
-                        return;
+                        return false;
                     }
                     while (loop_val <= loopValue)
                     {
@@ -265,7 +272,7 @@ namespace Assessment1
                             else
                             {
                                 fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
-                                return;
+                                return false;
                             }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
@@ -276,7 +283,7 @@ namespace Assessment1
                     if (loop_val <= loopValue)
                     {
                         fm.textBox2.AppendText("Variable " + variable_name + " should be greater than " + loopValue);
-                        return;
+                        return false;
                     }
                     while (loop_val >= loopValue)
                     {
@@ -302,7 +309,7 @@ namespace Assessment1
                             else
                             {
                                 fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
-                                return;
+                                return false;
                             }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
@@ -313,7 +320,7 @@ namespace Assessment1
                     if (loop_val < loopValue)
                     {
                         fm.textBox2.AppendText("Variable " + variable_name + " should be greater than " + loopValue);
-                        return;
+                        return false;
                     }
                     while (loop_val > loopValue)
                     {
@@ -338,7 +345,7 @@ namespace Assessment1
                             else
                             {
                                 fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
-                                return;
+                                return false;
                             }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
@@ -349,7 +356,7 @@ namespace Assessment1
                     if (loop_val > loopValue)
                     {
                         fm.textBox2.AppendText("Variable " + variable_name + " should be smaller than " + loopValue);
-                        return;
+                        return false;
                     }
                     while (loop_val < loopValue)
                     {
@@ -374,14 +381,18 @@ namespace Assessment1
                             else
                             {
                                 fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
-                                return;
+                                return false;
                             }
                         }
                         variable.TryGetValue(variable_name, out loop_val);
                     }
                 }
             }
-
+            else
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -391,7 +402,7 @@ namespace Assessment1
         /// <param name="lines"></param>
         /// <param name="method_found_in_line"></param>
         /// <param name="fm"></param>
-        public void run_method_command(string Draw, string[] lines, int method_found_in_line, Form1 fm)
+        public bool run_method_command(string Draw, string[] lines, int method_found_in_line, Form1 fm)
         {
             int method_end_tag_exist = 0;
             for (int a = method_found_in_line; a < lines.Length; a++)
@@ -404,11 +415,17 @@ namespace Assessment1
             if (method_end_tag_exist == 0)
             {
                 fm.textBox2.AppendText("Error: Method not closed.");
-                return;
+                return false;
             }
 
-            //method             
-            string[] command_parts = Draw.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            //method          
+            string[] command_part = Draw.Split(new string[] { "(" }, StringSplitOptions.RemoveEmptyEntries);
+            string inside_brackets = command_part[1];
+            inside_brackets = Regex.Replace(inside_brackets, @"\s+", "");
+            string cmd = command_part[0] + "(" + inside_brackets;
+
+
+            string[] command_parts = cmd.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             string method_name = command_parts[1].Trim();
             method_name = Regex.Replace(method_name, @"\s+", "");
             int parameter_count = 0;
@@ -416,7 +433,7 @@ namespace Assessment1
             ArrayList commands_inside_method = new ArrayList();
             for (int i = method_found_in_line; i < lines.Length; i++)
             {
-                if (!lines.Equals("endmethod"))
+                if (!lines[i].Equals("endmethod"))
                 {
                     commands_inside_method.Add(lines[i]);
                 }
@@ -435,10 +452,14 @@ namespace Assessment1
             }
             else
             {
-                parameter_count = 1;
-                if (parameter_count > 0)
+                if (parameter_inside_method.Length > 0)
                 {
+                    parameter_count = 1;
                     method_parameter_variables.Add(parameter_inside_method);
+                }
+                else
+                {
+                    parameter_count = 0;
                 }
             }
             string signature = method_name + "," + parameter_count;
@@ -450,13 +471,16 @@ namespace Assessment1
             {
                 fm.textBox2.AppendText("Method already exist");
             }
-
-
+            return true;
         }
 
 
-
-        public void run_method_call(string Draw, Form1 fm)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Draw"></param>
+        /// <param name="fm"></param>
+        public bool run_method_call(string Draw, Form1 fm)
         {
             string methodname = Draw.Split('(')[0];
             methodname = Regex.Replace(methodname, @"\s+", "");
@@ -479,9 +503,9 @@ namespace Assessment1
             }
             else
             {
-                parameter_count = 1;
-                if (parameter_count > 0)
+                if (parameter_inside_method.Length > 0)
                 {
+                    parameter_count = 1;
                     if (!variable.ContainsKey((string)method_parameter_variables[0]))
                     {
                         variable.Add((string)method_parameter_variables[0], int.Parse(parameter_inside_method));
@@ -490,6 +514,10 @@ namespace Assessment1
                     {
                         variable[(string)method_parameter_variables[0]] = int.Parse(parameter_inside_method);
                     }
+                }
+                else
+                {
+                    parameter_count = 0;
                 }
             }
             string signature = methodname.Trim() + "," + parameter_count;
@@ -517,10 +545,10 @@ namespace Assessment1
                 else
                 {
                     fm.textBox2.AppendText("\n Command: (" + cmd + ") not supported.");
-                    return;
+                    return false;
                 }
             }
-
+            return true;
         }
 
 
@@ -534,8 +562,9 @@ namespace Assessment1
         /// 
         /// </summary>
         /// <param name="Draw"></param>
-        public void run_variable_command(string Draw)
+        public bool run_variable_command(string Draw)
         {
+            Draw = Regex.Replace(Draw, @"\s+", "");
             string variable_name = Draw.Split('=')[0].Trim();
             int variable_value = int.Parse(Draw.Split('=')[1].Trim());
             if (!variable.ContainsKey(variable_name))
@@ -546,15 +575,19 @@ namespace Assessment1
             {
                 variable[variable_name] = variable_value;
             }
+            return true;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="fm"></param>
+        /// <returns></returns>
         public bool runVariableOperation(string line, Form1 fm)
         {
-
             try
             {
-                //splits by + = or -
                 line = Regex.Replace(line, @"\s+", "");
                 string[] variables = line.Split(new Char[] { '+', '-', '*', '/' }, StringSplitOptions.RemoveEmptyEntries);
                 int number_of_operator = 0;
@@ -603,13 +636,13 @@ namespace Assessment1
                 {
                     throw new VariableNotFoundException("Variable: " + vrKey + "doesnot exist");
                 }
-                return true;
             }
             catch (VariableNotFoundException e)
             {
                 fm.textBox2.AppendText(e.Message);
                 return false;
             }
+            return true;
         }
 
 

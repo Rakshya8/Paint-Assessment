@@ -96,8 +96,7 @@
             <summary>
             check validity of method command
             </summary>
-            <param name="command">command to be checked</param>
-            /// <param name="lines">command to be checked</param>
+            <param name="command">command to be checked</param>        
             <returns>true if command is valid else false</returns>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.check_methodcall(System.String)">
@@ -119,6 +118,16 @@
             Stores list of errors found during command validation
             </summary>
             <returns>returns list of errors</returns>
+        </member>
+        <member name="T:Assessment1.ComplexDrawing">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.#ctor">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:Assessment1.ComplexDrawing.getMethodSignature">
             <summary>
@@ -158,6 +167,13 @@
             <param name="method_found_in_line"></param>
             <param name="fm"></param>
         </member>
+        <member name="M:Assessment1.ComplexDrawing.run_method_call(System.String,Assessment1.Form1)">
+            <summary>
+            
+            </summary>
+            <param name="Draw"></param>
+            <param name="fm"></param>
+        </member>
         <member name="M:Assessment1.ComplexDrawing.getVariables">
             
         </member>
@@ -166,6 +182,14 @@
             
             </summary>
             <param name="Draw"></param>
+        </member>
+        <member name="M:Assessment1.ComplexDrawing.runVariableOperation(System.String,Assessment1.Form1)">
+            <summary>
+            
+            </summary>
+            <param name="line"></param>
+            <param name="fm"></param>
+            <returns></returns>
         </member>
         <member name="T:Assessment1.InvalidVariableNameException">
             <summary>
