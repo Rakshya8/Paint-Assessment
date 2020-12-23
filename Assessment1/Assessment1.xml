@@ -4,6 +4,11 @@
         <name>Assessment1</name>
     </assembly>
     <members>
+        <member name="T:Assessment1.BasicDrawing">
+            <summary>
+            Process drawing commands
+            </summary>
+        </member>
         <member name="M:Assessment1.BasicDrawing.#ctor">
             <summary>
             default constructor
@@ -31,17 +36,22 @@
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.#ctor">
             <summary>
-            Default Constructor
+            private constructor
+            </summary>
+        </member>
+        <member name="P:Assessment1.Check_Valid_Commands.GetInstance">
+            <summary>
+            static instance of itself.
             </summary>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.clear_list">
             <summary>
-            clear error list
+            clear error list, variables, method
             </summary>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.clear_error">
             <summary>
-            
+            clear error list
             </summary>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.Valid_execute_command(System.String)">
@@ -101,10 +111,11 @@
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.check_methodcall(System.String)">
             <summary>
-            
+            check vadility of method call command
+            checks if method exist or not
             </summary>
-            <param name="command"></param>
-            <returns></returns>
+            <param name="command">method containing command</param>
+            <returns>returns true if valid and false if invalid</returns>
         </member>
         <member name="M:Assessment1.Check_Valid_Commands.Check_command(System.String)">
             <summary>
@@ -121,58 +132,58 @@
         </member>
         <member name="T:Assessment1.ComplexDrawing">
             <summary>
-            
+            Contains If, Loop and Method command execution
             </summary>
         </member>
-        <member name="M:Assessment1.ComplexDrawing.#ctor">
+        <member name="P:Assessment1.ComplexDrawing.GetInstance">
             <summary>
             
             </summary>
         </member>
         <member name="M:Assessment1.ComplexDrawing.getMethodSignature">
             <summary>
-            
+            Collection of key/pair i.e. name/parameter.count
             </summary>
-            <returns></returns>
+            <returns>method signatures</returns>
         </member>
         <member name="M:Assessment1.ComplexDrawing.Clear_list">
             <summary>
-            
+            Clear methods, variables
             </summary>
         </member>
         <member name="M:Assessment1.ComplexDrawing.run_if_command(System.String,System.String[],System.Int32,Assessment1.Form1)">
             <summary>
-            
+            execute if command
             </summary>
-            <param name="Draw"></param>
-            <param name="lines"></param>
-            <param name="line_found_in"></param>
-            <param name="fm"></param>
+            <param name="Draw">if command line</param>
+            <param name="lines">all commands entered by user</param>
+            <param name="line_found_in">if command found line</param>
+            <param name="fm">Object of Form1</param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.run_loop_command(System.String,System.String[],System.Int32,Assessment1.Form1)">
             <summary>
-            
+            execute loop command
             </summary>
-            <param name="Draw"></param>
-            <param name="lines"></param>
-            <param name="loop_found_in_line"></param>
-            <param name="fm"></param>
+            <param name="Draw">loop command line</param>
+            <param name="lines">all commands entered by user</param>
+            <param name="loop_found_in_line">loop command found line</param>
+            <param name="fm">Object of Form1</param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.run_method_command(System.String,System.String[],System.Int32,Assessment1.Form1)">
             <summary>
-            
+            execute method command
             </summary>
-            <param name="Draw"></param>
-            <param name="lines"></param>
-            <param name="method_found_in_line"></param>
-            <param name="fm"></param>
+            <param name="Draw">method command line</param>
+            <param name="lines">all commands entered by user</param>
+            <param name="method_found_in_line">loop command found line</param>
+            <param name="fm">Object of Form1</param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.run_method_call(System.String,Assessment1.Form1)">
             <summary>
-            
+            Execute method call command
             </summary>
-            <param name="Draw"></param>
-            <param name="fm"></param>
+            <param name="Draw">method call line</param>
+            <param name="fm">Object of Form1</param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.getVariables">
             
@@ -377,14 +388,15 @@
         </member>
         <member name="M:Assessment1.Form1.draw_commands(System.String)">
             <summary>
-            
+            Basic drawing commands are executed here
             </summary>
+            <param name="Draw">command to be executed</param>
         </member>
         <member name="M:Assessment1.Form1.RotateShape">
             <summary>
-            
+            Stores degree of rotation
             </summary>
-            <returns></returns>
+            <returns>degree of rotation</returns>
         </member>
         <member name="M:Assessment1.Form1.panel1_Paint(System.Object,System.Windows.Forms.PaintEventArgs)">
             <summary>

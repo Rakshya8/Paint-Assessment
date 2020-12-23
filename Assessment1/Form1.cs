@@ -27,12 +27,6 @@ namespace Assessment1
         //Object of class Shape
         Shape s;
 
-        //Object of class ComplexDrawing
-        ComplexDrawing comp_draw = new ComplexDrawing();
-
-        //Object of class Check_Valid_Commands
-        Check_Valid_Commands check_cmd = new Check_Valid_Commands();
-
         //store list of objects.
         ArrayList shape_list = new ArrayList();
 
@@ -85,7 +79,7 @@ namespace Assessment1
                 string executing_command = textBox3.Text.ToLower();
 
                 //if executing command is valid
-                if (check_cmd.Valid_execute_command(executing_command))
+                if (Check_Valid_Commands.GetInstance.Valid_execute_command(executing_command))
                 {
                     //if executing command is clear
                     if (executing_command.Equals("clear"))
@@ -102,8 +96,8 @@ namespace Assessment1
                             DialogResult result = MessageBox.Show(message, title, buttons);
                             if (result == DialogResult.Yes)
                             {
-                                check_cmd.clear_list();
-                                comp_draw.Clear_list();
+                                Check_Valid_Commands.GetInstance.clear_list();
+                                ComplexDrawing.GetInstance.Clear_list();
                                 textBox2.Text = "All shapes, variable and methods are cleared.";
                             }
                         }
@@ -129,7 +123,7 @@ namespace Assessment1
                         int break_single_if_line = 0;
                         //
 
-                        check_cmd.clear_error();
+                        Check_Valid_Commands.GetInstance.clear_error();
                         //clear console
                         textBox2.Text = null;
                         //get string from textbox separated by newline and store into array
@@ -143,7 +137,7 @@ namespace Assessment1
 
                             string Draw = lines[i];
                             //check which command is currently active
-                            string command_type = check_cmd.check_command_type(Draw);
+                            string command_type = Check_Valid_Commands.GetInstance.check_command_type(Draw);
 
                             if (command_type.Equals("end_tag"))
                             {
@@ -174,7 +168,7 @@ namespace Assessment1
                             {
                                 if (command_type.Equals("drawing_commands"))
                                 {
-                                    if (check_cmd.Check_command(Draw))
+                                    if (Check_Valid_Commands.GetInstance.Check_command(Draw))
                                     {
                                         if (error == 0)
                                         {
@@ -195,13 +189,13 @@ namespace Assessment1
                             {
                                 if (command_type.Equals("method"))
                                 {
-                                    if (check_cmd.check_method(Draw))
+                                    if (Check_Valid_Commands.GetInstance.check_method(Draw))
                                     {
 
                                         if (error == 0)
                                         {
                                             complex_command = true;
-                                            comp_draw.run_method_command(Draw, lines, count_line, this);
+                                            ComplexDrawing.GetInstance.run_method_command(Draw, lines, count_line, this);
                                         }
                                     }
                                     else
@@ -214,12 +208,12 @@ namespace Assessment1
                                 //if (radius==10)
                                 if (command_type.Equals("if"))
                                 {
-                                    if (check_cmd.check_if_command(Draw))
+                                    if (Check_Valid_Commands.GetInstance.check_if_command(Draw))
                                     {
                                         if (error == 0)
                                         {
                                             complex_command = true;
-                                            comp_draw.run_if_command(Draw, lines, count_line, this);
+                                            ComplexDrawing.GetInstance.run_if_command(Draw, lines, count_line, this);
                                         }
                                     }
                                     else
@@ -231,12 +225,12 @@ namespace Assessment1
                                 if (command_type.Equals("loop"))
                                 {
                                     //check command validity
-                                    if (check_cmd.check_loop(Draw))
+                                    if (Check_Valid_Commands.GetInstance.check_loop(Draw))
                                     {
                                         if (error == 0)
                                         {
                                             complex_command = true;
-                                            comp_draw.run_loop_command(Draw, lines, count_line, this);
+                                            ComplexDrawing.GetInstance.run_loop_command(Draw, lines, count_line, this);
                                         }
                                     }
                                     else
@@ -248,11 +242,11 @@ namespace Assessment1
                                 }
                                 if (command_type.Equals("variable"))
                                 {
-                                    if (check_cmd.check_variable(Draw))
+                                    if (Check_Valid_Commands.GetInstance.check_variable(Draw))
                                     {
                                         if (error == 0)
                                         {
-                                            comp_draw.run_variable_command(Draw);
+                                            ComplexDrawing.GetInstance.run_variable_command(Draw);
                                         }
                                     }
                                     else
@@ -263,11 +257,11 @@ namespace Assessment1
                                 }
                                 if (command_type.Equals("variableoperation"))
                                 {
-                                    if (check_cmd.check_variable_operation(Draw))
+                                    if (Check_Valid_Commands.GetInstance.check_variable_operation(Draw))
                                     {
                                         if (error == 0)
                                         {
-                                            comp_draw.runVariableOperation(Draw, this);
+                                            ComplexDrawing.GetInstance.runVariableOperation(Draw, this);
                                         }
                                     }
                                     else
@@ -278,11 +272,11 @@ namespace Assessment1
                                 }
                                 if (command_type.Equals("methodcall"))
                                 {
-                                    if (check_cmd.check_methodcall(Draw))
+                                    if (Check_Valid_Commands.GetInstance.check_methodcall(Draw))
                                     {
                                         if (error == 0)
                                         {
-                                            comp_draw.run_method_call(Draw, this);
+                                            ComplexDrawing.GetInstance.run_method_call(Draw, this);
                                         }
                                     }
                                     else
@@ -301,7 +295,7 @@ namespace Assessment1
                         if (error != 0)
                         {
                             int i = 0;
-                            foreach (string error_description in check_cmd.error_list())
+                            foreach (string error_description in Check_Valid_Commands.GetInstance.error_list())
                             {
                                 textBox2.AppendText(Environment.NewLine + "Error on line " + error_lines[i] + " : " + error_description);
                                 i++;
@@ -315,8 +309,9 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// Basic drawing commands are executed here
         /// </summary>
+        /// <param name="Draw">command to be executed</param>
         public void draw_commands(string Draw)
         {
             variables = ComplexDrawing.getVariables();
@@ -436,9 +431,9 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// Stores degree of rotation
         /// </summary>
-        /// <returns></returns>
+        /// <returns>degree of rotation</returns>
         public static int RotateShape()
         {
             return rotate_degree;

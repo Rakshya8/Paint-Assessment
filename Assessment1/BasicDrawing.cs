@@ -10,6 +10,9 @@ using System.Text.RegularExpressions;
 
 namespace Assessment1
 {
+    /// <summary>
+    /// Process drawing commands
+    /// </summary>
     class BasicDrawing
     {
         //Object of class ShapeFactory

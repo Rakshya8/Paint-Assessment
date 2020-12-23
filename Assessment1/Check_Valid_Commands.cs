@@ -14,6 +14,26 @@ namespace Assessment1
     /// </summary>
     public class Check_Valid_Commands
     {
+        private static Check_Valid_Commands instance = null;
+
+        /// <summary>
+        /// private constructor
+        /// </summary>
+        private Check_Valid_Commands() { }
+
+        /// <summary>
+        /// static instance of itself.
+        /// </summary>
+        public static Check_Valid_Commands GetInstance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new Check_Valid_Commands();
+                return instance;
+            }
+        }
+
         //store if statement operator
         static string conditionOperator = null;
 
@@ -31,15 +51,7 @@ namespace Assessment1
         ArrayList errors = new ArrayList();
 
         /// <summary>
-        /// Default Constructor
-        /// </summary>
-        public Check_Valid_Commands()
-        {
-
-        }
-
-        /// <summary>
-        /// clear error list
+        /// clear error list, variables, method
         /// </summary>
         public void clear_list()
         {
@@ -49,7 +61,7 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// clear error list
         /// </summary>
         public void clear_error()
         {
@@ -450,10 +462,11 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// check vadility of method call command
+        /// checks if method exist or not
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">method containing command</param>
+        /// <returns>returns true if valid and false if invalid</returns>
         public bool check_methodcall(string command)
         {
             method_signature = ComplexDrawing.getMethodSignature();

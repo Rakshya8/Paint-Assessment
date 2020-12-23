@@ -3,12 +3,16 @@ using Assessment1;
 
 namespace UnitTestProjectFinal
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestClass]
     public class Method_Test
     {
-        Check_Valid_Commands cv = new Check_Valid_Commands();
-        ComplexDrawing cd = new ComplexDrawing();
         Form1 fm = new Form1();
+        /// <summary>
+        /// 
+        /// </summary>
         [TestMethod]
         public void check_method_command()
         {
@@ -26,16 +30,16 @@ namespace UnitTestProjectFinal
                     method_line = "method test1 (radius, width, height)";
                 }
                 string[] commands = method_text[i].Split('\n');
-                Assert.IsTrue(cv.check_method(method_line));
-                Assert.IsTrue(cd.run_method_command(method_line, commands, method_found_in, fm));
+                Assert.IsTrue(Check_Valid_Commands.GetInstance.check_method(method_line));
+                Assert.IsTrue(ComplexDrawing.GetInstance.run_method_command(method_line, commands, method_found_in, fm));
 
                 //method call                
             }
             string[] method_call = { "test ()", "test1 (10,20,30)" };
             foreach (string cmd in method_call)
             {
-                Assert.IsTrue(cv.check_methodcall(cmd));
-                Assert.IsTrue(cd.run_method_call(cmd, fm));
+                Assert.IsTrue(Check_Valid_Commands.GetInstance.check_methodcall(cmd));
+                Assert.IsTrue(ComplexDrawing.GetInstance.run_method_call(cmd, fm));
             }
 
         }

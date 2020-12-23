@@ -10,40 +10,52 @@ using System.Collections;
 namespace Assessment1
 {
     /// <summary>
-    /// 
+    /// Contains If, Loop and Method command execution
     /// </summary>
     public class ComplexDrawing
     {
+        //Object of class Check_Valid_Commands
 
-        Check_Valid_Commands check_cmd = new Check_Valid_Commands();
 
+        //store method signatures i.e method name and number of parameters
         static IDictionary<string, ArrayList> methods = new Dictionary<string, ArrayList>();
 
+        //store variables
         static IDictionary<string, int> variable = new Dictionary<string, int>();
 
+        //Opeator used in condition of if command
         static string operators = "";
 
+        //store variable name used during method declaration
         ArrayList method_parameter_variables = new ArrayList();
+
+        private static ComplexDrawing instance = null;
+        private ComplexDrawing() { }
 
         /// <summary>
         /// 
         /// </summary>
-        public ComplexDrawing()
+        public static ComplexDrawing GetInstance
         {
-
+            get
+            {
+                if (instance == null)
+                    instance = new ComplexDrawing();
+                return instance;
+            }
         }
 
         /// <summary>
-        /// 
+        /// Collection of key/pair i.e. name/parameter.count
         /// </summary>
-        /// <returns></returns>
+        /// <returns>method signatures</returns>
         public static IDictionary<string, ArrayList> getMethodSignature()
         {
             return methods;
         }
 
         /// <summary>
-        /// 
+        /// Clear methods, variables
         /// </summary>
         public void Clear_list()
         {
@@ -54,14 +66,15 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// execute if command
         /// </summary>
-        /// <param name="Draw"></param>
-        /// <param name="lines"></param>
-        /// <param name="line_found_in"></param>
-        /// <param name="fm"></param>
+        /// <param name="Draw">if command line</param>
+        /// <param name="lines">all commands entered by user</param>
+        /// <param name="line_found_in">if command found line</param>
+        /// <param name="fm">Object of Form1</param>
         public bool run_if_command(string Draw, string[] lines, int line_found_in, Form1 fm)
         {
+            //check for endif
             int if_end_tag_exist = 0;
             for (int a = line_found_in; a < lines.Length; a++)
             {
@@ -76,7 +89,9 @@ namespace Assessment1
                 return false;
             }
 
+            //get conditional operator
             operators = Check_Valid_Commands.getOperator();
+            //split line 
             string condition = Draw.Split('(', ')')[1].Trim();
             string[] splitCondition = condition.Split(new string[] {
                     operators
@@ -84,6 +99,7 @@ namespace Assessment1
             StringSplitOptions.RemoveEmptyEntries);
             try
             {
+
                 if (splitCondition.Length == 2)
                 {
                     string conditionKey = splitCondition[0].Trim();
@@ -123,14 +139,16 @@ namespace Assessment1
                             if (value1 != value2) conditionStatus = true;
                         }
 
+                        //if condition is true
                         if (conditionStatus)
                         {
                             if (lines[line_found_in].Equals("then"))
                             {
-                                string command_type = check_cmd.check_command_type(lines[line_found_in + 1]);
+                                //check type of command
+                                string command_type = Check_Valid_Commands.GetInstance.check_command_type(lines[line_found_in + 1]);
                                 if (command_type.Equals("drawing_commands"))
                                 {
-                                    if (check_cmd.Check_command(lines[line_found_in + 1]))
+                                    if (Check_Valid_Commands.GetInstance.Check_command(lines[line_found_in + 1]))
                                     {
                                         fm.draw_commands(lines[line_found_in + 1]);
                                     }
@@ -142,17 +160,17 @@ namespace Assessment1
                                 {
                                     if (!(lines[i].Equals("endif")))
                                     {
-                                        string command_type = check_cmd.check_command_type(lines[i]);
+                                        string command_type = Check_Valid_Commands.GetInstance.check_command_type(lines[i]);
                                         if (command_type.Equals("drawing_commands"))
                                         {
-                                            if (check_cmd.Check_command(lines[i]))
+                                            if (Check_Valid_Commands.GetInstance.Check_command(lines[i]))
                                             {
                                                 fm.draw_commands(lines[i]);
                                             }
                                         }
                                         else if (command_type.Equals("variableoperation"))
                                         {
-                                            if (check_cmd.check_variable_operation(lines[i]))
+                                            if (Check_Valid_Commands.GetInstance.check_variable_operation(lines[i]))
                                             {
                                                 runVariableOperation(lines[i], fm);
                                             }
@@ -198,12 +216,12 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// execute loop command
         /// </summary>
-        /// <param name="Draw"></param>
-        /// <param name="lines"></param>
-        /// <param name="loop_found_in_line"></param>
-        /// <param name="fm"></param>
+        /// <param name="Draw">loop command line</param>
+        /// <param name="lines">all commands entered by user</param>
+        /// <param name="loop_found_in_line">loop command found line</param>
+        /// <param name="fm">Object of Form1</param>
         public bool run_loop_command(string Draw, string[] lines, int loop_found_in_line, Form1 fm)
         {
             int loop_end_tag_exist = 0;
@@ -253,18 +271,18 @@ namespace Assessment1
                     {
                         foreach (string cmd in cmds)
                         {
-                            string command_type = check_cmd.check_command_type(cmd);
+                            string command_type = Check_Valid_Commands.GetInstance.check_command_type(cmd);
 
                             if (command_type.Equals("drawing_commands"))
                             {
-                                if (check_cmd.Check_command(cmd))
+                                if (Check_Valid_Commands.GetInstance.Check_command(cmd))
                                 {
                                     fm.draw_commands(cmd);
                                 }
                             }
                             else if (command_type.Equals("variableoperation"))
                             {
-                                if (check_cmd.check_variable_operation(cmd))
+                                if (Check_Valid_Commands.GetInstance.check_variable_operation(cmd))
                                 {
                                     runVariableOperation(cmd, fm);
                                 }
@@ -290,18 +308,18 @@ namespace Assessment1
 
                         foreach (string cmd in cmds)
                         {
-                            string command_type = check_cmd.check_command_type(cmd);
+                            string command_type = Check_Valid_Commands.GetInstance.check_command_type(cmd);
 
                             if (command_type.Equals("drawing_commands"))
                             {
-                                if (check_cmd.Check_command(cmd))
+                                if (Check_Valid_Commands.GetInstance.Check_command(cmd))
                                 {
                                     fm.draw_commands(cmd);
                                 }
                             }
                             else if (command_type.Equals("variableoperation"))
                             {
-                                if (check_cmd.check_variable_operation(cmd))
+                                if (Check_Valid_Commands.GetInstance.check_variable_operation(cmd))
                                 {
                                     runVariableOperation(cmd, fm);
                                 }
@@ -326,18 +344,18 @@ namespace Assessment1
                     {
                         foreach (string cmd in cmds)
                         {
-                            string command_type = check_cmd.check_command_type(cmd);
+                            string command_type = Check_Valid_Commands.GetInstance.check_command_type(cmd);
 
                             if (command_type.Equals("drawing_commands"))
                             {
-                                if (check_cmd.Check_command(cmd))
+                                if (Check_Valid_Commands.GetInstance.Check_command(cmd))
                                 {
                                     fm.draw_commands(cmd);
                                 }
                             }
                             else if (command_type.Equals("variableoperation"))
                             {
-                                if (check_cmd.check_variable_operation(cmd))
+                                if (Check_Valid_Commands.GetInstance.check_variable_operation(cmd))
                                 {
                                     runVariableOperation(cmd, fm);
                                 }
@@ -362,18 +380,18 @@ namespace Assessment1
                     {
                         foreach (string cmd in cmds)
                         {
-                            string command_type = check_cmd.check_command_type(cmd);
+                            string command_type = Check_Valid_Commands.GetInstance.check_command_type(cmd);
 
                             if (command_type.Equals("drawing_commands"))
                             {
-                                if (check_cmd.Check_command(cmd))
+                                if (Check_Valid_Commands.GetInstance.Check_command(cmd))
                                 {
                                     fm.draw_commands(cmd);
                                 }
                             }
                             else if (command_type.Equals("variableoperation"))
                             {
-                                if (check_cmd.check_variable_operation(cmd))
+                                if (Check_Valid_Commands.GetInstance.check_variable_operation(cmd))
                                 {
                                     runVariableOperation(cmd, fm);
                                 }
@@ -396,12 +414,12 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// execute method command
         /// </summary>
-        /// <param name="Draw"></param>
-        /// <param name="lines"></param>
-        /// <param name="method_found_in_line"></param>
-        /// <param name="fm"></param>
+        /// <param name="Draw">method command line</param>
+        /// <param name="lines">all commands entered by user</param>
+        /// <param name="method_found_in_line">loop command found line</param>
+        /// <param name="fm">Object of Form1</param>
         public bool run_method_command(string Draw, string[] lines, int method_found_in_line, Form1 fm)
         {
             int method_end_tag_exist = 0;
@@ -476,10 +494,10 @@ namespace Assessment1
 
 
         /// <summary>
-        /// 
+        /// Execute method call command
         /// </summary>
-        /// <param name="Draw"></param>
-        /// <param name="fm"></param>
+        /// <param name="Draw">method call line</param>
+        /// <param name="fm">Object of Form1</param>
         public bool run_method_call(string Draw, Form1 fm)
         {
             string methodname = Draw.Split('(')[0];
@@ -527,17 +545,17 @@ namespace Assessment1
             methods.TryGetValue(signature, out commands);
             foreach (string cmd in commands)
             {
-                string command_type = check_cmd.check_command_type(cmd);
+                string command_type = Check_Valid_Commands.GetInstance.check_command_type(cmd);
                 if (command_type.Equals("drawing_commands"))
                 {
-                    if (check_cmd.Check_command(cmd))
+                    if (Check_Valid_Commands.GetInstance.Check_command(cmd))
                     {
                         fm.draw_commands(cmd);
                     }
                 }
                 else if (command_type.Equals("variableoperation"))
                 {
-                    if (check_cmd.check_variable_operation(cmd))
+                    if (Check_Valid_Commands.GetInstance.check_variable_operation(cmd))
                     {
                         runVariableOperation(cmd, fm);
                     }
