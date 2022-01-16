@@ -18,9 +18,9 @@ namespace UnitTestProjectFinal
         public void check_if_command()
         {
             //set variables
-            string variable = "radius = 10";
-            Assert.IsTrue(Check_Valid_Commands.GetInstance.check_variable(variable));
-            Assert.IsTrue(ComplexDrawing.GetInstance.run_variable_command(variable));
+            string var = "radius = 10";
+            Assert.IsTrue(Check_Valid_Commands.GetInstance.check_variable(var));
+            Assert.IsTrue(ComplexDrawing.GetInstance.run_variable_command(var));
 
             string[] text = { "if (radius==10)\nthen\ncircle (radius)", "if (radius==10)\ncircle (radius)\nendif" };
             foreach (string if_type in text)

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Assessment1
 {
     /// <summary>
-/// Class ShapeFactory controls the type of shape object to create
-/// </summary>
-     class ShapeFactory
+    /// Class ShapeFactory controls the type of shape object to create
+    /// </summary>
+    class ShapeFactory
     {
         /// <summary>
         /// check user requirement for shape and return that shape
@@ -33,7 +33,7 @@ namespace Assessment1
             }
             else if (shapeType.Equals("TRIANGLE"))
             {
-               return new Triangle();
+                return new Triangle();
             }
             else if (shapeType.Equals("POLYGON"))
             {
@@ -41,7 +41,7 @@ namespace Assessment1
             }
             else
             {
-                
+
                 System.ArgumentException argEx = new System.ArgumentException("Factory error: " + shapeType + " does not exist");
                 throw argEx;
             }

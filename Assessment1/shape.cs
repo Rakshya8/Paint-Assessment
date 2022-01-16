@@ -12,9 +12,10 @@ namespace Assessment1
     /// </summary>
     abstract class Shape : IShapes
     {
-        protected Color c;
+        protected Color c, fc1, fc2;
         protected int x, y;
         protected bool fill;
+        protected bool f;
 
         /// <summary>
         /// Default constructor
@@ -60,5 +61,25 @@ namespace Assessment1
             x = list[0];
             y = list[1];
         }
+
+        // <summary>
+        /// Override set method derived from base class
+        /// </summary>
+        /// <param name="colour">Color of pen</param>
+        /// <param name="fillshape">Inner fill shapes</param>
+        /// <param name="list">stores number of arguments</param>
+        public virtual void Set(Color colour, bool fillshape, bool flash, Color c1, Color c2, params int[] list)
+        {
+            c = colour;
+            fill = fillshape;
+            x = list[0];
+            y = list[1];
+            f = flash;
+            fc1 = c1;
+            fc2 = c2;
+
+        }
+
+
     }
 }

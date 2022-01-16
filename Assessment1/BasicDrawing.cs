@@ -13,8 +13,29 @@ namespace Assessment1
     /// <summary>
     /// Process drawing commands
     /// </summary>
-    class BasicDrawing
+    public class BasicDrawing
     {
+        private static BasicDrawing instance = null;
+
+        /// <summary>
+        /// private constructor
+        /// </summary>
+        private BasicDrawing() { }
+
+        /// <summary>
+        /// static instance of itself.
+        /// </summary>
+        public static BasicDrawing GetInstance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new BasicDrawing();
+                return instance;
+            }
+        }
+
+
         //Object of class ShapeFactory
         ShapeFactory factory = new ShapeFactory();
 
@@ -28,21 +49,14 @@ namespace Assessment1
         IDictionary<string, int> variable = new Dictionary<string, int>();
 
         /// <summary>
-        /// default constructor
-        /// </summary>
-        public BasicDrawing()
-        {
-
-        }
-
-        /// <summary>
         /// sets properties of shapes
         /// </summary>
         /// <param name="Draw">contains shape command</param>
         /// <param name="color">color of shape</param>
         /// <param name="fillshape">fill shape</param>
+        /// <param name="flash">check ft flash</param>
         /// <param name="list">contains x-axis, y-axis and shape size parameters</param>
-        public void SetBasicDrawing(string Draw, Color color, bool fillshape, params int[] list)
+        public void SetBasicDrawing(string Draw, Color color, bool fillshape, bool flash, Color c1, Color c2, params int[] list)
         {
             variable = ComplexDrawing.getVariables();
             int initX = list[0];
@@ -55,6 +69,7 @@ namespace Assessment1
             //start circle command 
             if (Drawing_command.Equals("circle"))
             {
+
                 string size = (Draw.Split('(', ')')[1]);
                 int radius = 0;
                 //checks if parameter is number.
@@ -70,7 +85,7 @@ namespace Assessment1
                 }
 
                 s = factory.getShape("circle");
-                s.Set(color, fillshape, initX, initY, radius);
+                s.Set(color, fillshape, flash, c1, c2, initX, initY, radius);
                 shape_list.Add(s);
             }
             //end circle command

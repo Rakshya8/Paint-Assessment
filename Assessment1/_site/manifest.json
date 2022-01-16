@@ -1,0 +1,258 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/C#/Assessment1/Assessment1/Assessment1",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "YbaQxjJeS3DXNnvIl6SgwQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "s9qEVcYlRbp+ngRcbzOdSQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "gB8AESyvNru97tzIZofEEg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "3BuyWI8J1COVCPa1tamcGQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.BasicDrawing.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.BasicDrawing.html",
+          "hash": "1WASAsQFC+WeJnEMoKuzXA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.Check_Valid_Commands.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.Check_Valid_Commands.html",
+          "hash": "7rk0jxSOSNBG7rXsjJu56A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.ComplexDrawing.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.ComplexDrawing.html",
+          "hash": "bQPeSSAxcBPs0HB0EvZE/Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.Form1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.Form1.html",
+          "hash": "qIUOx0qlksbjuEtk8UXwbQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.InvalidCommandException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.InvalidCommandException.html",
+          "hash": "zCTDug3TWNEUA3KSDQh5Cw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.InvalidMethodNameException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.InvalidMethodNameException.html",
+          "hash": "BPUL7fUVWY5WTcW+4201Aw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.InvalidParameterException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.InvalidParameterException.html",
+          "hash": "n/qXFeYPGHn6QpwdgFEDhg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.InvalidVariableNameException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.InvalidVariableNameException.html",
+          "hash": "g5UPjH1EZB5tmfXRgHYVHg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.MethodNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.MethodNotFoundException.html",
+          "hash": "V6LZPfD8x1p2QX3+pgU/Sg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.VariableNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.VariableNotFoundException.html",
+          "hash": "KDk5JQcWqYX+24B6Hw2vaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Assessment1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Assessment1.html",
+          "hash": "KFoluOpKG4/V64Tc0lpHQw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "obj/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "mkol24w+iJlTBDHCfGmE5w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "G2AoE5T/2VarbHvzLEo4TQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 3,
+          "skipped_file_count": 3
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 11,
+          "skipped_file_count": 9
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

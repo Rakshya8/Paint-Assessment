@@ -4,7 +4,7 @@ using Assessment1;
 namespace UnitTestProjectFinal
 {
     /// <summary>
-    /// 
+    /// Test Class
     /// </summary>
     [TestClass]
     public class Simple_drawing_commands_test

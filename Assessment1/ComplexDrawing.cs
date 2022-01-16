@@ -14,9 +14,6 @@ namespace Assessment1
     /// </summary>
     public class ComplexDrawing
     {
-        //Object of class Check_Valid_Commands
-
-
         //store method signatures i.e method name and number of parameters
         static IDictionary<string, ArrayList> methods = new Dictionary<string, ArrayList>();
 
@@ -33,7 +30,7 @@ namespace Assessment1
         private ComplexDrawing() { }
 
         /// <summary>
-        /// 
+        /// if instance is null then create a new object of class
         /// </summary>
         public static ComplexDrawing GetInstance
         {
@@ -240,6 +237,7 @@ namespace Assessment1
 
             string[] store_command = Draw.Split(new string[] { "for" }, StringSplitOptions.RemoveEmptyEntries);
             int loop_val = 0;
+            int counter = 0;
             string[] loop_condition = store_command[1].Split(new string[] { "<=", ">=", "<", ">" }, StringSplitOptions.RemoveEmptyEntries);
             string variable_name = loop_condition[0].ToLower().Trim();
             int loopValue = int.Parse(loop_condition[1].Trim());
@@ -258,6 +256,17 @@ namespace Assessment1
                     {
                         break;
                     }
+                    if ((lines[i].Contains(variable_name + "+") || lines[i].Contains(variable_name + "-") || lines[i].Contains(variable_name + "*") || lines[i].Contains(variable_name + "/")))
+                    {
+
+                        counter++;
+                    }
+                }
+
+                if (counter == 0)
+                {
+                    fm.textBox2.AppendText("Counter variable not handled");
+                    return false;
                 }
 
                 if (store_command[1].Contains("<="))
@@ -487,7 +496,7 @@ namespace Assessment1
             }
             else
             {
-                fm.textBox2.AppendText("Method already exist");
+                fm.textBox2.AppendText("Method already exist in line " + method_found_in_line);
             }
             return true;
         }
@@ -570,16 +579,19 @@ namespace Assessment1
         }
 
 
-        ///
+        /// <summary>
+        /// To get the variables
+        /// </summary>
+        /// <returns>variables and their values</returns>
         public static IDictionary<string, int> getVariables()
         {
             return variable;
         }
 
         /// <summary>
-        /// 
+        /// Execute variable command
         /// </summary>
-        /// <param name="Draw"></param>
+        /// <param name="Draw">variable line</param>
         public bool run_variable_command(string Draw)
         {
             Draw = Regex.Replace(Draw, @"\s+", "");
@@ -597,11 +609,11 @@ namespace Assessment1
         }
 
         /// <summary>
-        /// 
+        /// Execute variable operation
         /// </summary>
-        /// <param name="line"></param>
-        /// <param name="fm"></param>
-        /// <returns></returns>
+        /// <param name="line">variable operation line</param>
+        /// <param name="fm">Object of Form1</param>
+        /// <returns>true if operation run successfully otherwise false</returns>
         public bool runVariableOperation(string line, Form1 fm)
         {
             try
@@ -662,7 +674,5 @@ namespace Assessment1
             }
             return true;
         }
-
-
     }
 }

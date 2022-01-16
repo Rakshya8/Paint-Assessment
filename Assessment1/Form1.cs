@@ -21,9 +21,6 @@ namespace Assessment1
         //GDI+ Drawing surface
         Graphics graphics;
 
-        //Object of class BasicDrawing
-        BasicDrawing bd = new BasicDrawing();
-
         //Object of class Shape
         Shape s;
 
@@ -49,10 +46,17 @@ namespace Assessment1
         //default Settings
         //store pen color
         Color color = Color.Black;
+
+        //Initalized vairables for flash colors
+        Color flash_color1;
+        Color flash_color2;
         //store x-axis point
         int initX = 0;
         //store y-axis point
         int initY = 0;
+
+        //Initalized variable for Storing flash status
+        bool flash = false;
 
         /// <summary>
         /// Default Constructor to instantiate values of form
@@ -116,8 +120,7 @@ namespace Assessment1
                     //if executing command is run
                     if (executing_command.Equals("run"))
                     {
-                        bool complex_command = false;
-                        //count current line number
+                        bool complex_command = false;                        //count current line number
                         count_line = 0;
                         //
                         int break_single_if_line = 0;
@@ -134,16 +137,21 @@ namespace Assessment1
                         for (int i = 0; i < lines.Length; i++)
                         {
                             count_line++;
-
+                            if (lines[i].Length == 0)
+                            {
+                                continue;
+                            }
                             string Draw = lines[i];
                             //check which command is currently active
                             string command_type = Check_Valid_Commands.GetInstance.check_command_type(Draw);
 
+                            //if endcommand is found before any command open
                             if (command_type.Equals("end_tag"))
                             {
                                 if (!complex_command)
                                 {
-                                    textBox2.AppendText("Error: Command " + Draw + " found. Command initiation doesnot exist.");
+                                    error++;
+                                    textBox2.AppendText(Environment.NewLine + "Error: Command " + Draw + " found. Command initiation doesnot exist.");
                                 }
                                 else
                                 {
@@ -152,12 +160,14 @@ namespace Assessment1
 
                             }
 
+                            //if command is invalid
                             if (command_type.Equals("invalid"))
                             {
-                                textBox2.AppendText("Invalid Command ( " + Draw + " ) on line " + count_line);
+                                textBox2.AppendText(Environment.NewLine + "Invalid Command ( " + Draw + " ) on line " + count_line);
                                 continue;
                             }
 
+                            //if/then command break
                             if (command_type.Equals("singleif"))
                             {
                                 break_single_if_line = count_line + 1;
@@ -184,17 +194,17 @@ namespace Assessment1
                             }
 
 
-
+                            //type of command 
                             if (command_type.Equals("variable") || command_type.Equals("if") || command_type.Equals("loop") || command_type.Equals("method") || command_type.Equals("variableoperation") || command_type.Equals("methodcall"))
                             {
+                                //method command
                                 if (command_type.Equals("method"))
                                 {
+                                    complex_command = true;
                                     if (Check_Valid_Commands.GetInstance.check_method(Draw))
                                     {
-
                                         if (error == 0)
                                         {
-                                            complex_command = true;
                                             ComplexDrawing.GetInstance.run_method_command(Draw, lines, count_line, this);
                                         }
                                     }
@@ -205,14 +215,16 @@ namespace Assessment1
                                     }
 
                                 }
-                                //if (radius==10)
+                                //if command
                                 if (command_type.Equals("if"))
                                 {
+                                    complex_command = true;
                                     if (Check_Valid_Commands.GetInstance.check_if_command(Draw))
                                     {
+
                                         if (error == 0)
                                         {
-                                            complex_command = true;
+
                                             ComplexDrawing.GetInstance.run_if_command(Draw, lines, count_line, this);
                                         }
                                     }
@@ -222,14 +234,16 @@ namespace Assessment1
                                         error_lines.Add(count_line);
                                     }
                                 }
+
+                                //loop command
                                 if (command_type.Equals("loop"))
                                 {
+                                    complex_command = true;
                                     //check command validity
                                     if (Check_Valid_Commands.GetInstance.check_loop(Draw))
                                     {
                                         if (error == 0)
                                         {
-                                            complex_command = true;
                                             ComplexDrawing.GetInstance.run_loop_command(Draw, lines, count_line, this);
                                         }
                                     }
@@ -240,6 +254,8 @@ namespace Assessment1
                                     }
 
                                 }
+
+                                //variable command
                                 if (command_type.Equals("variable"))
                                 {
                                     if (Check_Valid_Commands.GetInstance.check_variable(Draw))
@@ -255,6 +271,8 @@ namespace Assessment1
                                         error_lines.Add(count_line);
                                     }
                                 }
+
+                                //variable operation command
                                 if (command_type.Equals("variableoperation"))
                                 {
                                     if (Check_Valid_Commands.GetInstance.check_variable_operation(Draw))
@@ -270,6 +288,8 @@ namespace Assessment1
                                         error_lines.Add(count_line);
                                     }
                                 }
+
+                                //method call 
                                 if (command_type.Equals("methodcall"))
                                 {
                                     if (Check_Valid_Commands.GetInstance.check_methodcall(Draw))
@@ -292,6 +312,8 @@ namespace Assessment1
                                 complex_command = false;
                             }
                         }
+
+                        //show errors
                         if (error != 0)
                         {
                             int i = 0;
@@ -314,7 +336,9 @@ namespace Assessment1
         /// <param name="Draw">command to be executed</param>
         public void draw_commands(string Draw)
         {
+            //get variables
             variables = ComplexDrawing.getVariables();
+            //remove all whitespace
             Draw = Regex.Replace(Draw, @"\s+", "");
             string Drawing_command = Draw.Split('(')[0];
             if (Drawing_command.Equals("moveto"))
@@ -422,9 +446,39 @@ namespace Assessment1
             }
 
 
+            if (Drawing_command.Equals("redgreen"))
+            {
+                flash = true;
+                flash_color1 = Color.Red;
+                flash_color2 = Color.Green;
+
+            }
+            if (Drawing_command.Equals("redgreen"))
+            {
+                flash = true;
+                flash_color1 = Color.Red;
+                flash_color2 = Color.Green;
+
+            }
+            if (Drawing_command.Equals("blueyellow"))
+            {
+                flash = true;
+                flash_color1 = Color.Blue;
+                flash_color2 = Color.Yellow;
+
+            }
+            if (Drawing_command.Equals("blackwhite"))
+            {
+                flash = true;
+                flash_color1 = Color.Black;
+                flash_color2 = Color.White;
+
+            }
+
+
             if (Drawing_command.Equals("circle") || Drawing_command.Equals("triangle") || Drawing_command.Equals("rectangle") || Drawing_command.Equals("polygon"))
             {
-                bd.SetBasicDrawing(Draw, color, fillshape, initX, initY);
+                BasicDrawing.GetInstance.SetBasicDrawing(Draw, color, fillshape, flash, flash_color1, flash_color2, initX, initY);
                 panel1.Refresh();
             }
 
@@ -446,11 +500,12 @@ namespace Assessment1
         /// <param name="e">contains the event data</param>
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            shape_list = bd.getShape();
+            shape_list = BasicDrawing.GetInstance.getShape();
             for (int i = 0; i < shape_list.Count; i++)
             {
                 s = (Shape)shape_list[i];
                 s.Draw(graphics);
+                Console.WriteLine(1000000);
             }
 
             if (drawline.Count != 0)
@@ -558,11 +613,135 @@ namespace Assessment1
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Shows list of executing loop commands available
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
         private void ifLoopMethodCmdsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(" IF: If <variable>=10 \n Line 1 \n Line 2 Endif \n " +
                 "-----------------------\nLOOP: radius = 10 \n count = 1 \n loop for count <= 5 \n circle(radius) \n radius + 10  \n count + 1 \n endloop \n" +
                 "-----------------------\nMETHOD: Define a method with: \n Method myMethod(parameter list) \n Line 1 \n Etc \n Endmethod \n Call a method with: \n myMethod(< parameter list >) ");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Opens a save dialog to save commands into a text format document
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
+
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Title = "Save Text File";
+            saveFileDialog1.DefaultExt = "txt";
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string path = saveFileDialog1.FileName;
+                File.WriteAllText(path, textBox1.Text);
+                textBox2.AppendText("File Saved: " + path);
+            }
+
+        }
+        /// <summary>
+        /// Opens a open dialog to read text file and show commands
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
+        private void loadToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Title = "Browse Text Files";
+            openFileDialog1.DefaultExt = "txt";
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string path = openFileDialog1.FileName;
+                string readfile = File.ReadAllText(path);
+                textBox1.Text = readfile;
+                textBox2.AppendText("File loaded: " + path);
+            }
+        }
+        /// <summary>
+        /// Shows About of the Program
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
+        private void loadToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            MessageBox.Show("Console Based Paint Application. Developed by © Rakshya Moktan 2021 ");
+
+        }
+
+        /// <summary>
+        /// Exits the Program
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
+        }
+
+        /// <summary>
+        /// Clears the Program
+        /// </summary>
+        /// <param name="sender">contains a reference to the control/object that raised the event.</param>
+        /// <param name="e">contains the event data</param>
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            graphics.Clear(Color.White);
+            drawline.Clear();
+            shape_list.Clear();
+            textBox2.Text = "All shapes are cleared.";
+            if (ComplexDrawing.getMethodSignature().Count != 0 || ComplexDrawing.getVariables().Count != 0)
+            {
+                string message = "Do you want to variables and methods also?";
+                string title = "Clear Data";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                DialogResult result = MessageBox.Show(message, title, buttons);
+                if (result == DialogResult.Yes)
+                {
+                    Check_Valid_Commands.GetInstance.clear_list();
+                    ComplexDrawing.GetInstance.Clear_list();
+                    textBox2.Text = "All shapes, variable and methods are cleared.";
+                }
+            }
         }
     }
 }

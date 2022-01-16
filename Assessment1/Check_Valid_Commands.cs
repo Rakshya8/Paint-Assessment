@@ -117,7 +117,7 @@ namespace Assessment1
                     type = "methodcall";
                 }
             }
-            else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon") || cmd.Contains("rotate"))
+            else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon") || cmd.Contains("rotate") || cmd.Contains("redgreen") || cmd.Contains("blueyellow") || cmd.Contains("blackwhite"))
             {
                 type = "drawing_commands";
             }
@@ -520,6 +520,10 @@ namespace Assessment1
         {
             variable = ComplexDrawing.getVariables();
             string Draw_cmd = command.Split('(')[0].Trim();
+            if (Draw_cmd.Equals("redgreen") || Draw_cmd.Equals("blueyellow") || Draw_cmd.Equals("blackwhite"))
+            {
+                return true;
+            }
             try
             {
                 if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon") || Draw_cmd.Equals("rotate"))
@@ -627,6 +631,13 @@ namespace Assessment1
                             errors.Add(e.Message);
                             return false;
                         }
+                    }
+                    //end of pen command
+
+                    //check pen command
+                    if (Draw_cmd.Equals("redgreen"))
+                    {
+                        return true;
                     }
                     //end of pen command
 

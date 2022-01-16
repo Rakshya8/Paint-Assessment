@@ -11,16 +11,22 @@
         </member>
         <member name="M:Assessment1.BasicDrawing.#ctor">
             <summary>
-            default constructor
+            private constructor
             </summary>
         </member>
-        <member name="M:Assessment1.BasicDrawing.SetBasicDrawing(System.String,System.Drawing.Color,System.Boolean,System.Int32[])">
+        <member name="P:Assessment1.BasicDrawing.GetInstance">
+            <summary>
+            static instance of itself.
+            </summary>
+        </member>
+        <member name="M:Assessment1.BasicDrawing.SetBasicDrawing(System.String,System.Drawing.Color,System.Boolean,System.Boolean,System.Drawing.Color,System.Drawing.Color,System.Int32[])">
             <summary>
             sets properties of shapes
             </summary>
             <param name="Draw">contains shape command</param>
             <param name="color">color of shape</param>
             <param name="fillshape">fill shape</param>
+            <param name="flash">check ft flash</param>
             <param name="list">contains x-axis, y-axis and shape size parameters</param>
         </member>
         <member name="M:Assessment1.BasicDrawing.getShape">
@@ -137,7 +143,7 @@
         </member>
         <member name="P:Assessment1.ComplexDrawing.GetInstance">
             <summary>
-            
+            if instance is null then create a new object of class
             </summary>
         </member>
         <member name="M:Assessment1.ComplexDrawing.getMethodSignature">
@@ -186,85 +192,88 @@
             <param name="fm">Object of Form1</param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.getVariables">
-            
+            <summary>
+            To get the variables
+            </summary>
+            <returns>variables and their values</returns>
         </member>
         <member name="M:Assessment1.ComplexDrawing.run_variable_command(System.String)">
             <summary>
-            
+            Execute variable command
             </summary>
-            <param name="Draw"></param>
+            <param name="Draw">variable line</param>
         </member>
         <member name="M:Assessment1.ComplexDrawing.runVariableOperation(System.String,Assessment1.Form1)">
             <summary>
-            
+            Execute variable operation
             </summary>
-            <param name="line"></param>
-            <param name="fm"></param>
-            <returns></returns>
+            <param name="line">variable operation line</param>
+            <param name="fm">Object of Form1</param>
+            <returns>true if operation run successfully otherwise false</returns>
         </member>
         <member name="T:Assessment1.InvalidVariableNameException">
             <summary>
-            
+            invalid variable name exception
             </summary>
         </member>
         <member name="M:Assessment1.InvalidVariableNameException.#ctor(System.String)">
             <summary>
-            
+            invalid variable name exception 
             </summary>
             <param name="message"></param>
         </member>
         <member name="T:Assessment1.InvalidCommandException">
             <summary>
-            
+            invalid command exception 
             </summary>
         </member>
         <member name="M:Assessment1.InvalidCommandException.#ctor(System.String)">
             <summary>
-            
+            invalid command exception 
             </summary>
             <param name="message"></param>
         </member>
         <member name="T:Assessment1.InvalidParameterException">
             <summary>
-            
+            invalid parameter exception
             </summary>
         </member>
         <member name="M:Assessment1.InvalidParameterException.#ctor(System.String)">
             <summary>
-            
+            invalid parameter exception
             </summary>
             <param name="message"></param>
         </member>
         <member name="T:Assessment1.VariableNotFoundException">
             <summary>
-            
+            variable not found exception
             </summary>
         </member>
         <member name="M:Assessment1.VariableNotFoundException.#ctor(System.String)">
             <summary>
-            
+            variable not found exception
             </summary>
             <param name="message"></param>
         </member>
         <member name="T:Assessment1.InvalidMethodNameException">
             <summary>
-            
+            invalid method name
             </summary>
         </member>
         <member name="M:Assessment1.InvalidMethodNameException.#ctor(System.String)">
             <summary>
-            
+            invalid method name
             </summary>
             <param name="message"></param>
         </member>
         <member name="T:Assessment1.MethodNotFoundException">
             <summary>
-            
+            method not found exception
             </summary>
         </member>
         <member name="M:Assessment1.MethodNotFoundException.#ctor(System.String)">
             <summary>
-            
+            method not found exception
             </summary>
             <param name="message"></param>
         </member>
@@ -335,6 +344,7 @@
             <param name="fillshape">Inner fill shapes</param>
             <param name="list">stores number of arguments</param>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:Assessment1.Shape.Set(System.Drawing.Color,System.Boolean,System.Boolean,System.Drawing.Color,System.Drawing.Color,System.Int32[])" -->
         <member name="T:Assessment1.Circle">
             <summary>
             Class Circle inherits base class Shape
@@ -355,7 +365,7 @@
             <param name="y">Y-axis Coordinate</param>
             <param name="radius">Radius Of Circle</param>
         </member>
-        <member name="M:Assessment1.Circle.Set(System.Drawing.Color,System.Boolean,System.Int32[])">
+        <member name="M:Assessment1.Circle.Set(System.Drawing.Color,System.Boolean,System.Boolean,System.Drawing.Color,System.Drawing.Color,System.Int32[])">
             <summary>
             New implementation of Set method that is inherited from a base class.
             </summary>
@@ -455,6 +465,48 @@
             <param name="sender">contains a reference to the control/object that raised the event.</param>
             <param name="e">contains the event data</param>
         </member>
+        <member name="M:Assessment1.Form1.ifLoopMethodCmdsToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Shows list of executing loop commands available
+            </summary>
+            <param name="sender">contains a reference to the control/object that raised the event.</param>
+            <param name="e">contains the event data</param>
+        </member>
+        <member name="M:Assessment1.Form1.saveToolStripMenuItem1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Opens a save dialog to save commands into a text format document
+            </summary>
+            <param name="sender">contains a reference to the control/object that raised the event.</param>
+            <param name="e">contains the event data</param>
+        </member>
+        <member name="M:Assessment1.Form1.loadToolStripMenuItem1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Opens a open dialog to read text file and show commands
+            </summary>
+            <param name="sender">contains a reference to the control/object that raised the event.</param>
+            <param name="e">contains the event data</param>
+        </member>
+        <member name="M:Assessment1.Form1.loadToolStripMenuItem_Click_1(System.Object,System.EventArgs)">
+            <summary>
+            Shows About of the Program
+            </summary>
+            <param name="sender">contains a reference to the control/object that raised the event.</param>
+            <param name="e">contains the event data</param>
+        </member>
+        <member name="M:Assessment1.Form1.exitToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Exits the Program
+            </summary>
+            <param name="sender">contains a reference to the control/object that raised the event.</param>
+            <param name="e">contains the event data</param>
+        </member>
+        <member name="M:Assessment1.Form1.newToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Clears the Program
+            </summary>
+            <param name="sender">contains a reference to the control/object that raised the event.</param>
+            <param name="e">contains the event data</param>
+        </member>
         <member name="F:Assessment1.Form1.components">
             <summary>
             Required designer variable.
@@ -470,11 +522,6 @@
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="F:Assessment1.Form1.textBox2">
-            <summary>
-            textbox2 shows all error found
             </summary>
         </member>
         <member name="M:Assessment1.Program.Main">

@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,12 +61,12 @@ namespace Assessment1
         /// New implementation of Draw method that is inherited from a base class.
         /// </summary>
         /// <param name="g">GDi+ Drawing surface</param>
-        public override void Draw(Graphics g)
+        public override void Draw(Graphics gt)
         {
             if (Form1.RotateShape() != 0)
             {
                 float rotateValue = (float)Form1.RotateShape();
-                g.RotateTransform((rotateValue), MatrixOrder.Append);
+                gt.RotateTransform((rotateValue), MatrixOrder.Append);
             }
 
             Pen p = new Pen(c, 2);
@@ -84,11 +84,11 @@ namespace Assessment1
             points[2].Y = y + side2;
             if (fill)
             {
-                g.FillPolygon(b, points);
+                gt.FillPolygon(b, points);
             }
             else
             {
-                g.DrawPolygon(p, points);
+                gt.DrawPolygon(p, points);
             }
 
 
