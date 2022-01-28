@@ -6,12 +6,12 @@
     <members>
         <member name="T:Assessment1.BasicDrawing">
             <summary>
-            Process drawing commands
+            Process basic drawing commands instances
             </summary>
         </member>
         <member name="M:Assessment1.BasicDrawing.#ctor">
             <summary>
-            private constructor
+            private constructor for class
             </summary>
         </member>
         <member name="P:Assessment1.BasicDrawing.GetInstance">
@@ -26,7 +26,9 @@
             <param name="Draw">contains shape command</param>
             <param name="color">color of shape</param>
             <param name="fillshape">fill shape</param>
-            <param name="flash">check ft flash</param>
+            <param name="flash">check flash status</param>
+            <param name="c1">Flash color</param>
+            <param name="c2">Flash color</param>
             <param name="list">contains x-axis, y-axis and shape size parameters</param>
         </member>
         <member name="M:Assessment1.BasicDrawing.getShape">
@@ -297,7 +299,7 @@
             <param name="y">Y-axis Coordinate</param>
             <param name="points">polygon points</param>
         </member>
-        <member name="M:Assessment1.Polygon.Set(System.Drawing.Color,System.Boolean,System.Int32[])">
+        <member name="M:Assessment1.Polygon.Set(System.Drawing.Color,System.Boolean,System.Boolean,System.Drawing.Color,System.Drawing.Color,System.Int32[])">
             <summary>
             New implementation of Set method that is inherited from a base class.
             </summary>
@@ -407,6 +409,18 @@
             Stores degree of rotation
             </summary>
             <returns>degree of rotation</returns>
+        </member>
+        <member name="M:Assessment1.Form1.TranslateX">
+            <summary>
+            Stores X of Translate
+            </summary>
+            <returns>X of Translate</returns>
+        </member>
+        <member name="M:Assessment1.Form1.TranslateY">
+            <summary>
+            Stores Y of Translate
+            </summary>
+            <returns>Y of Translate</returns>
         </member>
         <member name="M:Assessment1.Form1.panel1_Paint(System.Object,System.Windows.Forms.PaintEventArgs)">
             <summary>
@@ -550,7 +564,7 @@
             <param name="length">Length of Rectangle</param>
             <param name="width">Width of Rectangle</param>
         </member>
-        <member name="M:Assessment1.Rectangle.Set(System.Drawing.Color,System.Boolean,System.Int32[])">
+        <member name="M:Assessment1.Rectangle.Set(System.Drawing.Color,System.Boolean,System.Boolean,System.Drawing.Color,System.Drawing.Color,System.Int32[])">
             <summary>
             New implementation of Set method that is inherited from a base class.
             </summary>
@@ -617,7 +631,7 @@
             <param name="b">Side2 of Traingle</param>
             <param name="c">Side3 of Traingle</param>
         </member>
-        <member name="M:Assessment1.Triangle.Set(System.Drawing.Color,System.Boolean,System.Int32[])">
+        <member name="M:Assessment1.Triangle.Set(System.Drawing.Color,System.Boolean,System.Boolean,System.Drawing.Color,System.Drawing.Color,System.Int32[])">
             <summary>
             New implementation of Set method that is inherited from a base class.
             </summary>

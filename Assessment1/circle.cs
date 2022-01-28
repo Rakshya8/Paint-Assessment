@@ -16,7 +16,7 @@ namespace Assessment1
     {
         int radius;
         Thread newThread;
-        bool running = true, check = false;
+        bool check = false;
 
         /// <summary>
         /// Call base class constructor
@@ -60,12 +60,17 @@ namespace Assessment1
         /// </summary>
         /// <param name="g">GDi+ Drawing surface</param>
         public override void Draw(Graphics g)
-        {
-            Console.WriteLine(f);
+        {          
             if (Form1.RotateShape() != 0)
             {
                 float rotateValue = (float)Form1.RotateShape();
                 g.RotateTransform((rotateValue));
+            }
+            if (Form1.TranslateX() != 0 && Form1.TranslateY() !=0)
+            {
+                float translateX = (float)Form1.TranslateX();
+                float translateY = (float)Form1.TranslateY();
+                g.TranslateTransform(translateX, translateY);
             }
             Pen p = new Pen(c, 2);
             SolidBrush b = new SolidBrush(c);
@@ -88,15 +93,15 @@ namespace Assessment1
                         {
                             if (check == false)
                             {
-                                p = new Pen(fc1);
-                                b = new SolidBrush(fc1);
+                                Pen p2 = new Pen(fc1);
+                                SolidBrush b2 = new SolidBrush(fc1);
                                 if (fill)
                                 {
-                                    g.FillEllipse(b, x, y, radius, radius);
+                                    g.FillEllipse(b2, x, y, radius, radius);
                                 }
                                 else
                                 {
-                                    g.DrawEllipse(p, x, y, radius, radius);
+                                    g.DrawEllipse(p2, x, y, radius, radius);
                                 }
 
                                 check = true;
@@ -104,29 +109,26 @@ namespace Assessment1
                             }
                             else
                             {
-                                p = new Pen(fc2);
-                                b = new SolidBrush(fc2);
+                                Pen p1 = new Pen(fc2);
+                                SolidBrush b1 = new SolidBrush(fc2);
                                 if (fill)
                                 {
-                                    g.FillEllipse(b, x, y, radius, radius);
+                                    g.FillEllipse(b1, x, y, radius, radius);
                                 }
                                 else
                                 {
-                                    g.DrawEllipse(p, x, y, radius, radius);
+                                    g.DrawEllipse(p1, x, y, radius, radius);
                                 }
 
                                 check = false;
 
                             }
+                            Console.WriteLine();
                             Thread.Sleep(1000);
                         }
                     }
                 });
-                newThread.Start(); //make the thread execute
-                if (f == false)
-                {
-                    newThread.Abort();
-                }
+                newThread.Start(); //make the thread execute               
 
 
             }

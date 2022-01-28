@@ -11,7 +11,7 @@ namespace UnitTestProjectFinal
     {
         Form1 fm = new Form1();
         /// <summary>
-        /// 
+        /// Testing for test commands
         /// </summary>
         [TestMethod]
         public void check_method_command()

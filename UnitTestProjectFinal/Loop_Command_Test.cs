@@ -12,7 +12,7 @@ namespace UnitTestProjectFinal
         Form1 fm = new Form1();
 
         /// <summary>
-        /// 
+        /// Testing for Loop Commands
         /// </summary>
         [TestMethod]
         public void Check_loop_command()

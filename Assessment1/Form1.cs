@@ -18,7 +18,7 @@ namespace Assessment1
     /// </summary>
     public partial class Form1 : Form
     {
-        //GDI+ Drawing surface
+        //GDI+ Drawing surfaces
         Graphics graphics;
 
         //Object of class Shape
@@ -35,6 +35,10 @@ namespace Assessment1
 
         //rotate degree
         static int rotate_degree = 0;
+
+        //translate X and Y
+        static int translateX = 0;
+        static int translateY = 0;
 
         //Generic collection to store variable name  and value
         IDictionary<string, int> variables = new Dictionary<string, int>();
@@ -57,6 +61,7 @@ namespace Assessment1
 
         //Initalized variable for Storing flash status
         bool flash = false;
+
 
         /// <summary>
         /// Default Constructor to instantiate values of form
@@ -91,6 +96,7 @@ namespace Assessment1
                         graphics.Clear(Color.White);
                         drawline.Clear();
                         shape_list.Clear();
+                        Shape.running = false;
                         textBox2.Text = "All shapes are cleared.";
                         if (ComplexDrawing.getMethodSignature().Count != 0 || ComplexDrawing.getVariables().Count != 0)
                         {
@@ -114,7 +120,11 @@ namespace Assessment1
                         color = Color.Black;
                         initX = 0;
                         initY = 0;
-                        textBox2.Text = "Pen color set to Black" + Environment.NewLine + "Fill turned off" + Environment.NewLine + "Moved to 0,0";
+                        flash = false;
+                        translateX = 0;
+                        translateY = 0;
+                        rotate_degree = 0;
+                        textBox2.Text = "Pen color set to Black" + Environment.NewLine + "Fill turned off"+Environment.NewLine + "Flash turned off" + Environment.NewLine + "Moved to 0,0";
                     }
 
                     //if executing command is run
@@ -406,6 +416,28 @@ namespace Assessment1
                     rotate_degree = int.Parse(positions.Split(',')[0]);
                 }
             }
+            if (Drawing_command.Equals("translate"))
+            {
+                string positions = Draw.Split('(', ')')[1];
+
+                if (!Regex.IsMatch(positions.Split(',')[0], @"^[0-9]+$"))
+                {
+                    variables.TryGetValue(positions.Split(',')[0], out translateX);
+                }
+                else
+                {
+                    translateX = int.Parse(positions.Split(',')[0]);
+                }
+
+                if (!Regex.IsMatch(positions.Split(',')[0], @"^[0-9]+$"))
+                {
+                    variables.TryGetValue(positions.Split(',')[1], out translateY);
+                }
+                else
+                {
+                    translateY = int.Parse(positions.Split(',')[1]);
+                }
+            }
 
             if (Drawing_command.Equals("pen"))
             {
@@ -451,13 +483,7 @@ namespace Assessment1
                 flash = true;
                 flash_color1 = Color.Red;
                 flash_color2 = Color.Green;
-
-            }
-            if (Drawing_command.Equals("redgreen"))
-            {
-                flash = true;
-                flash_color1 = Color.Red;
-                flash_color2 = Color.Green;
+                Shape.running = true;
 
             }
             if (Drawing_command.Equals("blueyellow"))
@@ -465,6 +491,7 @@ namespace Assessment1
                 flash = true;
                 flash_color1 = Color.Blue;
                 flash_color2 = Color.Yellow;
+                Shape.running = true;
 
             }
             if (Drawing_command.Equals("blackwhite"))
@@ -472,7 +499,7 @@ namespace Assessment1
                 flash = true;
                 flash_color1 = Color.Black;
                 flash_color2 = Color.White;
-
+                Shape.running = true;
             }
 
 
@@ -491,6 +518,23 @@ namespace Assessment1
         public static int RotateShape()
         {
             return rotate_degree;
+        }
+
+        /// <summary>
+        /// Stores X of Translate
+        /// </summary>
+        /// <returns>X of Translate</returns>
+        public static int TranslateX()
+        {
+            return translateX;
+        }
+        /// <summary>
+        /// Stores Y of Translate
+        /// </summary>
+        /// <returns>Y of Translate</returns>
+        public static int TranslateY()
+        {
+            return translateY;
         }
 
         /// <summary>
@@ -728,6 +772,7 @@ namespace Assessment1
             graphics.Clear(Color.White);
             drawline.Clear();
             shape_list.Clear();
+            Shape.running = true;
             textBox2.Text = "All shapes are cleared.";
             if (ComplexDrawing.getMethodSignature().Count != 0 || ComplexDrawing.getVariables().Count != 0)
             {

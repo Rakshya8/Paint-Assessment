@@ -12,12 +12,12 @@ namespace UnitTestProjectFinal
         Form1 fm = new Form1();
 
         /// <summary>
-        /// 
+        /// Testing for variable commands
         /// </summary>
         [TestMethod]
         public void Variable_command_and_operations_test()
         {
-            string[] text = { "width = 10", "rectangle=50", "height= 5" };
+            string[] text = { "width = 10", "rectangle 50", "height= 5" };
             foreach (string check_text in text)
             {
                 Assert.IsTrue(Check_Valid_Commands.GetInstance.check_variable(check_text));

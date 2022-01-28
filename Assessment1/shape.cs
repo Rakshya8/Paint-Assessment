@@ -16,6 +16,7 @@ namespace Assessment1
         protected int x, y;
         protected bool fill;
         protected bool f;
+        public static bool running=true;
 
         /// <summary>
         /// Default constructor

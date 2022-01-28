@@ -11,14 +11,14 @@ using System.Text.RegularExpressions;
 namespace Assessment1
 {
     /// <summary>
-    /// Process drawing commands
+    /// Process basic drawing commands instances
     /// </summary>
     public class BasicDrawing
     {
         private static BasicDrawing instance = null;
 
         /// <summary>
-        /// private constructor
+        /// private constructor for class
         /// </summary>
         private BasicDrawing() { }
 
@@ -36,13 +36,13 @@ namespace Assessment1
         }
 
 
-        //Object of class ShapeFactory
+        //Object of class ShapeFactory class
         ShapeFactory factory = new ShapeFactory();
 
         //Object of class Shape
         Shape s;
 
-        //store list of objects.
+        //Array List to store objects of shape type
         ArrayList shape_list = new ArrayList();
 
         //stores variables
@@ -54,7 +54,9 @@ namespace Assessment1
         /// <param name="Draw">contains shape command</param>
         /// <param name="color">color of shape</param>
         /// <param name="fillshape">fill shape</param>
-        /// <param name="flash">check ft flash</param>
+        /// <param name="flash">check flash status</param>
+        /// <param name="c1">Flash color</param>
+        /// <param name="c2">Flash color</param>
         /// <param name="list">contains x-axis, y-axis and shape size parameters</param>
         public void SetBasicDrawing(string Draw, Color color, bool fillshape, bool flash, Color c1, Color c2, params int[] list)
         {
@@ -117,7 +119,7 @@ namespace Assessment1
                 }
 
                 s = factory.getShape("rectangle");
-                s.Set(color, fillshape, initX, initY, width, height);
+                s.Set(color, fillshape, flash, c1, c2, initX, initY, width, height);
                 shape_list.Add(s);
             }
             //End Rectangle
@@ -157,7 +159,7 @@ namespace Assessment1
                     side3 = int.Parse(param[2]);
                 }
                 s = factory.getShape("triangle");
-                s.Set(color, fillshape, initX, initY, side1, side2, side3);
+                s.Set(color, fillshape, flash, c1, c2, initX, initY, side1, side2, side3);
                 shape_list.Add(s);
 
             }
@@ -182,7 +184,7 @@ namespace Assessment1
                     }
                 }
                 s = factory.getShape("polygon");
-                s.Set(color, fillshape, points);
+                s.Set(color, fillshape, flash, c1, c2, points);
                 shape_list.Add(s);
 
             }

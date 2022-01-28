@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading;
 
 namespace Assessment1
 {
@@ -14,6 +15,9 @@ namespace Assessment1
     class Triangle : Shape
     {
         int side1, side2, side3;
+
+        Thread newThread;
+        bool check = false;
 
         /// <summary>
         /// Call base class constructor
@@ -47,13 +51,17 @@ namespace Assessment1
         /// <param name="colour">Color of pen</param>
         /// <param name="fill">Inner fill shapes</param>
         /// <param name="list">stores number of arguments</param>
-        public override void Set(Color colour, bool fill, params int[] list)
+        public override void Set(Color colour, bool fill, bool flash, Color c1, Color c2,params int[] list)
         {
             //list[0] is x, list[1] is y, list[2] is radius
             base.Set(colour, fill, list[0], list[1]);
             this.side1 = list[2];
             this.side2 = list[3];
             this.side3 = list[4];
+            f = flash;
+            fc1 = c1;
+            fc2 = c2;
+            Console.WriteLine(f);
 
         }
 
@@ -61,12 +69,19 @@ namespace Assessment1
         /// New implementation of Draw method that is inherited from a base class.
         /// </summary>
         /// <param name="g">GDi+ Drawing surface</param>
-        public override void Draw(Graphics gt)
+        public override void Draw(Graphics g)
         {
             if (Form1.RotateShape() != 0)
             {
                 float rotateValue = (float)Form1.RotateShape();
-                gt.RotateTransform((rotateValue), MatrixOrder.Append);
+                g.RotateTransform((rotateValue), MatrixOrder.Append);
+            }
+
+            if (Form1.TranslateX() != 0 && Form1.TranslateY() != 0)
+            {
+                float translateX = (float)Form1.TranslateX();
+                float translateY = (float)Form1.TranslateY();
+                g.TranslateTransform(translateX, translateY);
             }
 
             Pen p = new Pen(c, 2);
@@ -84,13 +99,61 @@ namespace Assessment1
             points[2].Y = y + side2;
             if (fill)
             {
-                gt.FillPolygon(b, points);
+                g.FillPolygon(b, points);
             }
             else
             {
-                gt.DrawPolygon(p, points);
+                g.DrawPolygon(p, points);
             }
+            if (f == true)
+            {
+                //create the newthread passing the delegate method thread() which corresponds to the ThreadStart delegate (void method())
+                newThread = new System.Threading.Thread(delegate ()
+                {
+                    while (true) //don't allow (in this case) for it to terminate
+                    {
+                        while (running == true)
+                        {
+                            if (check == false)
+                            {
+                                Pen p2 = new Pen(fc1);
+                                SolidBrush b2 = new SolidBrush(fc1);
+                                if (fill)
+                                {
+                                    g.FillPolygon(b2, points);
+                                }
+                                else
+                                {
+                                    g.DrawPolygon(p2, points);
+                                }
 
+                                check = true;
+
+                            }
+                            else
+                            {
+                                Pen p1 = new Pen(fc2);
+                                SolidBrush b1 = new SolidBrush(fc2);
+                                if (fill)
+                                {
+                                    g.FillPolygon(b1, points);
+                                }
+                                else
+                                {
+                                    g.DrawPolygon(p1, points);
+                                }
+
+                                check = false;
+
+                            }
+                            Thread.Sleep(1000);
+                        }
+                    }
+                });
+                newThread.Start(); //make the thread execute               
+
+
+            }
 
         }
     }

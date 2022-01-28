@@ -452,6 +452,32 @@ references:
   commentId: F:Assessment1.Form1.textBox2
   fullName: Assessment1.Form1.textBox2
   nameWithType: Form1.textBox2
+- uid: Assessment1.Form1.TranslateX
+  name: TranslateX()
+  href: api/Assessment1.Form1.html#Assessment1_Form1_TranslateX
+  commentId: M:Assessment1.Form1.TranslateX
+  fullName: Assessment1.Form1.TranslateX()
+  nameWithType: Form1.TranslateX()
+- uid: Assessment1.Form1.TranslateX*
+  name: TranslateX
+  href: api/Assessment1.Form1.html#Assessment1_Form1_TranslateX_
+  commentId: Overload:Assessment1.Form1.TranslateX
+  isSpec: "True"
+  fullName: Assessment1.Form1.TranslateX
+  nameWithType: Form1.TranslateX
+- uid: Assessment1.Form1.TranslateY
+  name: TranslateY()
+  href: api/Assessment1.Form1.html#Assessment1_Form1_TranslateY
+  commentId: M:Assessment1.Form1.TranslateY
+  fullName: Assessment1.Form1.TranslateY()
+  nameWithType: Form1.TranslateY()
+- uid: Assessment1.Form1.TranslateY*
+  name: TranslateY
+  href: api/Assessment1.Form1.html#Assessment1_Form1_TranslateY_
+  commentId: Overload:Assessment1.Form1.TranslateY
+  isSpec: "True"
+  fullName: Assessment1.Form1.TranslateY
+  nameWithType: Form1.TranslateY
 - uid: Assessment1.InvalidCommandException
   name: InvalidCommandException
   href: api/Assessment1.InvalidCommandException.html

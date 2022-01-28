@@ -12,7 +12,7 @@ namespace UnitTestProjectFinal
         Form1 fm = new Form1();
 
         /// <summary>
-        /// 
+        /// Testing for IF commands
         /// </summary>
         [TestMethod]
         public void check_if_command()

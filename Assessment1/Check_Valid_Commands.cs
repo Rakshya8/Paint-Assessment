@@ -117,7 +117,7 @@ namespace Assessment1
                     type = "methodcall";
                 }
             }
-            else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon") || cmd.Contains("rotate") || cmd.Contains("redgreen") || cmd.Contains("blueyellow") || cmd.Contains("blackwhite"))
+            else if (cmd.Contains("moveto") || cmd.Contains("drawto") || cmd.Contains("pen") || cmd.Contains("fill") || cmd.Contains("circle") || cmd.Contains("rectangle") || cmd.Contains("triangle") || cmd.Contains("polygon") || cmd.Contains("rotate") || cmd.Contains("translate") || cmd.Contains("redgreen") || cmd.Contains("blueyellow") || cmd.Contains("blackwhite"))
             {
                 type = "drawing_commands";
             }
@@ -526,7 +526,7 @@ namespace Assessment1
             }
             try
             {
-                if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon") || Draw_cmd.Equals("rotate"))
+                if (Draw_cmd.Equals("moveto") || Draw_cmd.Equals("drawto") || Draw_cmd.Equals("pen") || Draw_cmd.Equals("fill") || Draw_cmd.Equals("circle") || Draw_cmd.Equals("rectangle") || Draw_cmd.Equals("triangle") || Draw_cmd.Equals("polygon") || Draw_cmd.Equals("rotate") || Draw_cmd.Equals("translate"))
                 {
                     string value_inside_brackets = null;
                     string[] parameters = null;
@@ -718,6 +718,72 @@ namespace Assessment1
 
                     }
                     //end rotate command
+
+                    //check translate command
+                    if (Draw_cmd.Equals("translate"))
+                    {
+                        try
+                        {
+                            if (parameters.Length == 2)
+                            {
+                                if (!Regex.IsMatch(parameters[0], @"^[0-9]+$"))
+                                {
+                                    if (variable.ContainsKey(parameters[0]))
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        throw new VariableNotFoundException("Variable: " + parameters[0] + " does not exist");
+                                    }
+                                }
+                                else
+                                {
+                                    int.Parse(parameters[1]);
+                                    return true;
+                                }
+                                if (!Regex.IsMatch(parameters[1], @"^[0-9]+$"))
+                                {
+                                    if (variable.ContainsKey(parameters[1]))
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        throw new VariableNotFoundException("Variable: " + parameters[1] + " does not exist");
+                                    }
+                                }
+                                else
+                                {
+                                    int.Parse(parameters[1]);
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                throw new InvalidParameterException("2 parameters are required.");
+                            }
+
+
+                        }
+                        catch (FormatException)
+                        {
+                            errors.Add("X and Y should be in numbers (0-9).");
+                            return false;
+                        }
+                        catch (InvalidParameterException e)
+                        {
+                            errors.Add(e.Message);
+                            return false;
+                        }
+                        catch (VariableNotFoundException e)
+                        {
+                            errors.Add(e.Message);
+                            return false;
+                        }
+
+                    }
+                    //end translate command check
 
 
                     //check circle command
